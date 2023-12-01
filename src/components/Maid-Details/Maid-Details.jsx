@@ -145,8 +145,17 @@ const MaidDetailComponent = () =>{
                         <div className="profileCard border border-solid rounded-lg p-4 mb-4 block lg:flex lg:items-start gap-4">
                             <div className="profileLeftSide">
                                 <div className="maidImage">
-                                    <img className="w-[18rem] h-[18rem] lg:w-[11rem] lg:h-[11rem] rounded-md object-cover object-top" src={`${import.meta.env.VITE_API_URL}${maidDetails.maidImg}`}/>
-                                </div>
+                                {maidDetails.maidImg && maidDetails.maidImg.includes("uploads/") ? (
+                                    <img
+                                    className="w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top"
+                                    src={`${import.meta.env.VITE_API_URL}${maidDetails.maidImg}`}
+                                    />
+                                ) : (
+                                    <img
+                                    className="w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top"
+                                    src={`https://res.cloudinary.com/dtcz2zuev/image/upload/${maidDetails.maidImg}`}
+                                    />
+                                )}                                </div>
                             </div>
                             <div className="profileRightSide">
                                 <div className="maidName text-lg font-bold">
@@ -189,7 +198,7 @@ const MaidDetailComponent = () =>{
                                             </div>
                                             <div className="whoAdd">
                                                 <div className="text-xs">Added to System By</div>
-                                                <div className="text-sm font-semibold">Zeeshan Khan</div>
+                                                <div className="text-sm font-semibold">{maidDetails.addedBy? maidDetails.addedBy : 'Admin'}</div>
                                             </div>
                                         </div>
                                     </div>

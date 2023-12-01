@@ -15,6 +15,19 @@ const AllMaids = () =>{
     const {verifyToken , roles: userRoles} = VerifyStaffToken();
     const [maidData, setMaidData] = useState([]);
     const [isFormVisible, setIsFormVisible] = useState(false);
+    const [itemsToLoad, setItemsToLoad] = useState(6);
+    const [totalItemsLoaded, setTotalItemsLoaded] = useState(6);
+
+    const sortedMaidData = [...maidData].sort((a, b) => {
+      return new Date(b.timestamp) - new Date(a.timestamp);
+    });
+
+    const currentItems = sortedMaidData.slice(0, totalItemsLoaded);
+
+    const handleLoadMore = () => {
+      setItemsToLoad(itemsToLoad + 6);
+      setTotalItemsLoaded(totalItemsLoaded + 6);
+    };
 
     useEffect(() => {
       const fetchMaidData = async () => {
@@ -42,9 +55,6 @@ const AllMaids = () =>{
     };
 
     const maidDataLength = maidData.length;
-    const sortedMaidData = [...maidData].sort((a, b) => {
-      return new Date(b.timestamp) - new Date(a.timestamp);
-    });
     return(
         <>
         {isFormVisible && <Backdrop showBackdrop={true} />}
@@ -78,10 +88,17 @@ const AllMaids = () =>{
                 <div className="maidsProfiles mt-2">
                 <div>
                     <div className="w-full border rounded-2xl border-solid p-6">
-                    {sortedMaidData.map((maid) => (
+                        {currentItems.map((maid) => (
                         <MaidProfile key={maid._id} maid={maid} />
-                    ))}
+                      ))}
+                      <div className="flex items-center justify-center">
+                        {totalItemsLoaded < sortedMaidData.length && (
+                          <button className="border bg-[#107243] border-[#29a167] px-6 py-3 text-sm mt-4 font-semibold cursor-pointer rounded-2xl text-[#fff]" onClick={handleLoadMore}>Load More</button>
+                        )}
+                      </div>
+                      
                     </div>
+                    
                 </div>
                 </div>
             </div>

@@ -100,7 +100,7 @@ const Sidebar = () => {
                             </li> : null
                             }
                             {userRoles.includes(roles.ShowAccessOnAddStaff) && <li>
-                                <Link to="/staff" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <Link to="/staff" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M10.6657 11.9245C11.8492 11.9245 12.9843 11.4544 13.8212 10.6175C14.6581 9.7807 15.1282 8.64571 15.1282 7.46225C15.1282 6.27879 14.6581 5.1438 13.8212 4.30696C12.9843 3.47013 11.8492 3 10.6657 3C9.48213 3 8.34707 3.47013 7.51018 4.30696C6.67329 5.1438 6.20313 6.27879 6.20313 7.46225C6.20313 8.64571 6.67329 9.7807 7.51018 10.6175C8.34707 11.4544 9.48213 11.9245 10.6657 11.9245Z" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M3 20.8448C3 17.391 6.43617 14.5977 10.6667 14.5977C11.5949 14.5977 12.4874 14.7315 13.3174 14.9814" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -113,7 +113,7 @@ const Sidebar = () => {
                         }
                         
                         <li onClick={toggleModal}>
-                            <a href="#" className="flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                            <a href="#" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path d="M15 3L19 3C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="#CD2424" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M10 17L15 12L10 7" stroke="#CD2424" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -189,7 +189,7 @@ const Sidebar = () => {
                                         </li> : null
                                         }
                                         {userRoles.includes(roles.ShowAccessOnAddStaff) && <li>
-                                        <Link to="/staff" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                        <Link to="/staff" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                             <path d="M10.6657 11.9245C11.8492 11.9245 12.9843 11.4544 13.8212 10.6175C14.6581 9.7807 15.1282 8.64571 15.1282 7.46225C15.1282 6.27879 14.6581 5.1438 13.8212 4.30696C12.9843 3.47013 11.8492 3 10.6657 3C9.48213 3 8.34707 3.47013 7.51018 4.30696C6.67329 5.1438 6.20313 6.27879 6.20313 7.46225C6.20313 8.64571 6.67329 9.7807 7.51018 10.6175C8.34707 11.4544 9.48213 11.9245 10.6657 11.9245Z" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path d="M3 20.8448C3 17.391 6.43617 14.5977 10.6667 14.5977C11.5949 14.5977 12.4874 14.7315 13.3174 14.9814" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -202,7 +202,7 @@ const Sidebar = () => {
                                     }
                                     
                                     <li onClick={toggleModal}>
-                                        <a href="#" className="flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                        <a href="#" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                             <path d="M15 3L19 3C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="#CD2424" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path d="M10 17L15 12L10 7" stroke="#CD2424" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

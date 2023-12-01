@@ -8,12 +8,15 @@ const axiosInstense = axios.create({
 
 
 const AddMaidForm = ({ onCloseForm }) =>{
-    const {verifyToken} = VerifyStaffToken();
+    const {verifyToken, staffName} = VerifyStaffToken();
     const [errorMessage, setErrorMessage] = useState(false)
     const [spinningLoader, setSpinningLoader] = useState(false)
     const [showOtherReligion, setShowOtherReligion] = useState(false);
     const [showOtherLanguage, setShowOtherLanguage] = useState(false);
     const [showOtherNationality, setShowOtherNationality] = useState(false);
+    const [primaryImgPreview, setPrimaryImgPreview] = useState('');
+    const [secondaryImgPreviews, setSecondaryImgPreviews] = useState(['', '', '']);
+    const [videoPreview, setVideoPreview] = useState('');
 
     const handleNationalityChange = (event) => {
         setShowOtherNationality(event.target.value === 'Other');
@@ -27,12 +30,50 @@ const AddMaidForm = ({ onCloseForm }) =>{
         setShowOtherLanguage(event.target.checked);
     };
 
+    const handlePrimaryImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPrimaryImgPreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setPrimaryImgPreview('');
+        }
+    };
+
+    const handleSecondaryImageChange = (event, index) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const newPreviews = [...secondaryImgPreviews];
+                newPreviews[index] = reader.result;
+                setSecondaryImgPreviews(newPreviews);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            const newPreviews = [...secondaryImgPreviews];
+            newPreviews[index] = '';
+            setSecondaryImgPreviews(newPreviews);
+        }
+    };
+
+    const handleVideoChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setVideoPreview(URL.createObjectURL(file));
+        } else {
+            setVideoPreview('');
+        }
+    };
 
     const handleMaidFormSubmit = async (event) =>{
       event.preventDefault();
       setSpinningLoader(true)
       const formData = new FormData(event.currentTarget);
-
+      formData.append('addedBy', staffName)
       let isValid = true;
 
       const fieldsToValidate = [
@@ -67,7 +108,7 @@ const AddMaidForm = ({ onCloseForm }) =>{
 
 
       try {
-        const response = await axiosInstense.post("api/v1/maids", formData, {
+        const response = await axiosInstense.post("api/v1/maids",formData, {
           headers: {
             Authorization: `Bearer ${verifyToken}`,
             'Content-Type': 'multipart/form-data',
@@ -84,6 +125,37 @@ const AddMaidForm = ({ onCloseForm }) =>{
       }
       
     }
+
+    const secondaryImageInputs = [1, 2, 3].map((index) => (
+        <div className="mb-4" key={`secondary-image-${index}`}>
+        {secondaryImgPreviews[index - 1] && (
+                    <img
+                        src={secondaryImgPreviews[index - 1]}
+                        alt={`Secondary Image ${index} Preview`}
+                        className="w-[8rem] h-[8rem] rounded-full object-cover object-top outline-none border-none"
+                    />
+                )}
+            <label className="block text-xl">Secondary Image {index}</label>
+            <div className="flex items-center mb-4 justify-center w-full">
+                <label htmlFor={`secondary-${index}-file`} className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                    </svg>
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                    </div>
+                    <input
+                        id={`secondary-${index}-file`}
+                        type="file"
+                        name={`maidImg${index + 1}`}
+                        onChange={(event) => handleSecondaryImageChange(event, index - 1)}
+                        hidden
+                    />
+                </label>
+                
+            </div>
+        </div>
+    ));
 
     return(
         <>
@@ -338,12 +410,14 @@ const AddMaidForm = ({ onCloseForm }) =>{
                                 <input value="She is good at cleaning, washing, ironing, and baby care. She is willing to learn cooking." type="text" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="remarks" />
                             </div>
                             </div>
-                            {/* <div>
-                                <div class="mb-4">
-                                <label class="block text-xl">Image</label>
-                                <input type="file" class="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="maidImg" />
-                                </div>
-                            </div> */}
+
+                            {primaryImgPreview && (
+                                <img
+                                    src={primaryImgPreview}
+                                    alt="Primary Image Preview"
+                                    className="w-[8rem] h-[8rem] rounded-full object-cover object-top outline-none border-none"
+                                />
+                            )}
 
                             <label class="block text-xl">Primary Image</label>                                
                             <div class="flex items-center mb-4 justify-center w-full">
@@ -354,51 +428,19 @@ const AddMaidForm = ({ onCloseForm }) =>{
                                         </svg>
                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                     </div>
-                                    <input id="primary-file" type="file"  name="maidImg" hidden />
+                                    <input onChange={handlePrimaryImageChange} required id="primary-file" type="file"  name="maidImg" hidden />
                                 </label>
                             </div> 
 
-                            <label class="block text-xl">Secondary Image 1</label>                                
-                            <div class="flex items-center mb-4 justify-center w-full">
-                                <label for="secondary-1-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                        </svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                    </div>
-                                    <input id="secondary-1-file" type="file" name="maidImg2" hidden />
-                                </label>
+                            {secondaryImageInputs && secondaryImageInputs}
 
-                            </div> 
-                            
-                            <label class="block text-xl">Secondary Image 2</label>                                
-                            <div class="flex items-center mb-4 justify-center w-full">
-                                <label for="secondary-2-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                        </svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                    </div>
-                                    <input id="secondary-2-file" type="file" name="maidImg3" hidden />
-                                </label>
-
-                            </div> 
-                            
-                            <label class="block text-xl">Secondary Image 3</label>                                
-                            <div class="flex items-center mb-4 justify-center w-full">
-                                <label for="secondary-3-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                        </svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                    </div>
-                                    <input id="secondary-3-file" type="file" name="maidImg4" hidden />
-                                </label>
-                            </div> 
-
+                            {videoPreview && (
+                                <video
+                                    controls
+                                    src={videoPreview}
+                                    className="w-[8rem] h-[8rem] rounded-full object-cover object-top outline-none border-none"
+                                />
+                            )}
                             <label class="block text-xl">Video</label>                                
                             <div class="flex items-center mb-4 justify-center w-full">
                                 <label for="video-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -408,7 +450,7 @@ const AddMaidForm = ({ onCloseForm }) =>{
                                         </svg>
                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                     </div>
-                                    <input id="video-file" accept="video/*" type="file" name="videoLink" hidden />
+                                    <input onChange={handleVideoChange} id="video-file" accept="video/*" type="file" name="videoLink" hidden />
                                 </label>
                             </div> 
 
