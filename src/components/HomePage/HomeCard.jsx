@@ -18,7 +18,7 @@ const HomeCard = ({cardTxt, count, total, svg}) =>{
                     <div>
                         <div className="flex items-center gap-4">
                             <span className="text-[2rem] text-[#262F32] font-bold">{count ? count : "00"} </span>
-                            <span>Today</span>
+                            {/* <span>Today</span> */}
                         </div>
                     </div>
                     <div>

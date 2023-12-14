@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Modal from '../UI/Modal';
 import roles from '../roles/roles';
 import { VerifyStaffToken } from '../Auth/VerifyToken';
+import Backdrop from '../UI/Backdrop';
 
 const Sidebar = () => {
   const { roles: userRoles, staffName} = VerifyStaffToken();
@@ -33,12 +34,13 @@ const Sidebar = () => {
 
   return (
     <>
+            {isSidebarOpen && <Backdrop zIndex="4" showBackdrop={true} />}
             <Modal modalAction={handleLogoutButton} modalTxt={"Do you want to logout from AL-Ghwali ?"} confirmTxt={"Yes, Logout"} showModal={showModal} toggleModal={toggleModal}/>
             <Header className="block md:hidden" onClick={toggleSidebar}/>
             {/* Mobile  */}
             <aside
             id="default-sidebar"
-            className={`fixed md:hidden top-0 left-0 z-[5] w-64 max-h-full min-h-full overflow-y-auto transition-transform ${
+            className={`fixed md:hidden top-0 left-0 z-[5] w-[90%] max-h-full min-h-full overflow-y-auto transition-transform ${
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
             } md:translate-x-0 bg-[#F2F5FF]`}
             aria-label="Sidebar"
@@ -111,6 +113,17 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                         }
+                        <li>
+                                <Link to="/accounts" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M10.6657 11.9245C11.8492 11.9245 12.9843 11.4544 13.8212 10.6175C14.6581 9.7807 15.1282 8.64571 15.1282 7.46225C15.1282 6.27879 14.6581 5.1438 13.8212 4.30696C12.9843 3.47013 11.8492 3 10.6657 3C9.48213 3 8.34707 3.47013 7.51018 4.30696C6.67329 5.1438 6.20313 6.27879 6.20313 7.46225C6.20313 8.64571 6.67329 9.7807 7.51018 10.6175C8.34707 11.4544 9.48213 11.9245 10.6657 11.9245Z" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M3 20.8448C3 17.391 6.43617 14.5977 10.6667 14.5977C11.5949 14.5977 12.4874 14.7315 13.3174 14.9814" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15.0226 19.3197L15.8779 20.175M19.8198 18.3678C19.4567 18.73 19.0015 18.9862 18.5035 19.1087C18.0054 19.2313 17.4833 19.2155 16.9935 19.0632L15.242 20.8109C15.1155 20.941 14.8664 21.0191 14.6879 20.9931L13.8772 20.8815C13.6094 20.8443 13.3603 20.5915 13.3194 20.3237L13.2078 19.5131C13.1818 19.3346 13.2673 19.0855 13.39 18.959L15.1379 17.2113C14.8404 16.2445 15.0709 15.1475 15.837 14.3852C16.934 13.2883 18.7153 13.2883 19.8161 14.3852C20.9169 15.4822 20.9169 17.2708 19.8198 18.3678Z" stroke="#434146" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M18 17C18.2652 17 18.5196 16.8946 18.7071 16.7071C18.8946 16.5196 19 16.2652 19 16C19 15.7348 18.8946 15.4804 18.7071 15.2929C18.5196 15.1054 18.2652 15 18 15C17.7348 15 17.4804 15.1054 17.2929 15.2929C17.1054 15.4804 17 15.7348 17 16C17 16.2652 17.1054 16.5196 17.2929 16.7071C17.4804 16.8946 17.7348 17 18 17Z" stroke="#434146" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span className="ms-3 text-base">Accounts</span>
+                                </Link>
+                        </li>
                         
                         <li onClick={toggleModal}>
                             <a href="#" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
@@ -198,8 +211,19 @@ const Sidebar = () => {
                                         </svg>
                                             <span className="ms-3 text-base">Access Staff</span>
                                         </Link>
-                                    </li>
-                                    }
+                                        </li>
+                                        }
+                                        <li>
+                                        <Link to="/accounts" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M10.6657 11.9245C11.8492 11.9245 12.9843 11.4544 13.8212 10.6175C14.6581 9.7807 15.1282 8.64571 15.1282 7.46225C15.1282 6.27879 14.6581 5.1438 13.8212 4.30696C12.9843 3.47013 11.8492 3 10.6657 3C9.48213 3 8.34707 3.47013 7.51018 4.30696C6.67329 5.1438 6.20313 6.27879 6.20313 7.46225C6.20313 8.64571 6.67329 9.7807 7.51018 10.6175C8.34707 11.4544 9.48213 11.9245 10.6657 11.9245Z" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M3 20.8448C3 17.391 6.43617 14.5977 10.6667 14.5977C11.5949 14.5977 12.4874 14.7315 13.3174 14.9814" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M15.0226 19.3197L15.8779 20.175M19.8198 18.3678C19.4567 18.73 19.0015 18.9862 18.5035 19.1087C18.0054 19.2313 17.4833 19.2155 16.9935 19.0632L15.242 20.8109C15.1155 20.941 14.8664 21.0191 14.6879 20.9931L13.8772 20.8815C13.6094 20.8443 13.3603 20.5915 13.3194 20.3237L13.2078 19.5131C13.1818 19.3346 13.2673 19.0855 13.39 18.959L15.1379 17.2113C14.8404 16.2445 15.0709 15.1475 15.837 14.3852C16.934 13.2883 18.7153 13.2883 19.8161 14.3852C20.9169 15.4822 20.9169 17.2708 19.8198 18.3678Z" stroke="#434146" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M18 17C18.2652 17 18.5196 16.8946 18.7071 16.7071C18.8946 16.5196 19 16.2652 19 16C19 15.7348 18.8946 15.4804 18.7071 15.2929C18.5196 15.1054 18.2652 15 18 15C17.7348 15 17.4804 15.1054 17.2929 15.2929C17.1054 15.4804 17 15.7348 17 16C17 16.2652 17.1054 16.5196 17.2929 16.7071C17.4804 16.8946 17.7348 17 18 17Z" stroke="#434146" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                            <span className="ms-3 text-base">Accounts</span>
+                                        </Link>
+                                        </li>
                                     
                                     <li onClick={toggleModal}>
                                         <a href="#" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">

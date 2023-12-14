@@ -1,7 +1,35 @@
 import React, { useEffect, useState } from "react";
 import HomeCard from "./HomeCard";
+import axios from "axios";
+import { VerifyStaffToken } from "../Auth/VerifyToken";
 
+const axiosInstense = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+  })
+  
 const HomePageCompo = () =>{
+    const [accountDetails, setAccountDetails] = useState(null)
+    const {verifyToken} = VerifyStaffToken();
+
+    useEffect(() => {
+        const fetchAccountHistory = async () => {
+          try {
+            const response = await axiosInstense.get(
+              "api/v1/maids/hirings/all/",
+              {
+                headers: {
+                  Authorization: `Bearer ${verifyToken}`,
+                },
+              }
+            );
+            setAccountDetails(response.data);
+          } catch (error) {
+            console.error("Error fetching maids:", error);
+          }
+        };
+    
+        fetchAccountHistory();
+      }, []);
 
 
     const svg1 = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -25,34 +53,35 @@ const HomePageCompo = () =>{
 
     return(
         <>
-            <div className="md:ml-[20rem] md:px-8 px-4">
-            <div className="relative">
-                
-                <div className="maidsProfiles mt-2">
-                <div className="flex flex-col gap-y-8">
-                    <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
-                        <HomeCard  count="00" total="00"/>
-                        <HomeCard svg={svg1} cardTxt="Planned Interviews" count="00" total="00"/>
-                        <HomeCard svg={svg2} cardTxt="Maids Hidden From Main Site" count="00" total="00"/>
-                        <HomeCard svg={svg3} cardTxt="Total Number Of Non-Hire Maids" count="00" total="00"/>
+        {accountDetails && <div className="md:ml-[20rem] md:px-8 px-4">
+                <div className="relative">
+                    
+                    <div className="maidsProfiles mt-2">
+                    <div className="flex flex-col gap-y-8">
+                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
+                            <HomeCard  count="00" total="00"/>
+                            <HomeCard svg={svg1} cardTxt="Planned Interviews" count="00" total="00"/>
+                            <HomeCard svg={svg2} cardTxt="Maids Hidden From Main Site" count="00" total="00"/>
+                            <HomeCard svg={svg3} cardTxt="Total Number Of Non-Hire Maids" count="00" total="00"/>
+                        </div>
+                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
+                            <HomeCard cardTxt="Total Amount (Advance)" total={accountDetails.totalAdvanceAmount} count={accountDetails.totalAdvanceAmount}/>
+                            <HomeCard cardTxt="Balance (Remaining)" total={accountDetails.balanceAmount} count={accountDetails.balanceAmount}/>
+                            <HomeCard cardTxt="Return Amount" total={accountDetails.totalReturnAmount} count={accountDetails.totalReturnAmount}/>
+                            <HomeCard />
+                        </div>
+                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
+                            <HomeCard />
+                            <HomeCard />
+                            <HomeCard />
+                            <HomeCard />
+                        </div>
                     </div>
-                    <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
-                        <HomeCard />
-                        <HomeCard />
-                        <HomeCard />
-                        <HomeCard />
-                    </div>
-                    <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
-                        <HomeCard />
-                        <HomeCard />
-                        <HomeCard />
-                        <HomeCard />
                     </div>
                 </div>
-                </div>
-            </div>
             
-            </div>
+        </div>}
+            
         </>
     )
 }

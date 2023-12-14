@@ -146,8 +146,20 @@ const EditStaffForm = ({ onCloseForm, staffValueData }) =>{
                                 </div>
                                 <div className="mb-4">
                                     <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
-                                        <label htmlFor="canAddStaff" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Can Add - Edit or Delete Staff?</label>
+                                        <label htmlFor="canAddStaff" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Can Add or Delete Staff?</label>
                                         <input onChange={(e) => handleCheckboxChange(e, 32)} checked={formData.roles.includes(32)} name="roles[]" id="canAddStaff" type="checkbox" value="32" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    </div>
+                                </div>
+                                <div className="mb-4">
+                                    <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
+                                        <label htmlFor="canEditMaid" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Can Edit Maid?</label>
+                                        <input onChange={(e) => handleCheckboxChange(e, 64)} checked={formData.roles.includes(64)} name="roles[]" id="canEditMaid" type="checkbox" value="64" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    </div>
+                                </div>
+                                <div className="mb-4">
+                                    <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
+                                        <label htmlFor="canAccessOnAccounts" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Have Access On Accounts or Maid History?</label>
+                                        <input onChange={(e) => handleCheckboxChange(e, 128)} checked={formData.roles.includes(128)} name="roles[]" id="canAccessOnAccounts" type="checkbox" value="128" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
                             </div>

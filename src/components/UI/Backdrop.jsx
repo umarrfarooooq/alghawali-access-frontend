@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Backdrop = ({ showBackdrop }) => {
+const Backdrop = ({ showBackdrop, zIndex }) => {
   const backdropStyles = {
     position: 'fixed',
     inset:"0",
@@ -9,7 +9,7 @@ const Backdrop = ({ showBackdrop }) => {
     height:"100%",
     background: 'rgba(38, 47, 50, 0.50)',
     backdropFilter: 'blur(4px)',
-    zIndex:9,
+    zIndex: zIndex || 9,
     display: showBackdrop ? 'block' : 'none',
   };
 
