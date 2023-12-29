@@ -3,8 +3,11 @@
 body{
     font-family: 'Montserrat', sans-serif !important;
     overflow-x: hidden !important;
+    
 }
-
+html{
+    scroll-behavior: smooth !important;
+}
 ::-webkit-scrollbar {
     width: 0px;
     background: transparent;

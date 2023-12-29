@@ -11,7 +11,7 @@ const axiosInstense = axios.create({
   })
   
   
-const AllMaids = () =>{
+const AllMaids = ({searchTerm}) =>{
     const {verifyToken , roles: userRoles} = VerifyStaffToken();
     const [maidData, setMaidData] = useState([]);
     const [isFormVisible, setIsFormVisible] = useState(false);
@@ -34,6 +34,7 @@ const AllMaids = () =>{
         try {
           const response = await axiosInstense.get("api/v1/maids/withHired",
             {
+              params: { search: searchTerm },
               headers: {
                 Authorization:
                 `Bearer ${verifyToken}`,
@@ -47,7 +48,7 @@ const AllMaids = () =>{
       };
   
       fetchMaidData();
-    }, [isFormVisible]);
+    }, [isFormVisible, searchTerm]);
 
 
     const toggleFormVisibility = () => {
@@ -85,7 +86,7 @@ const AllMaids = () =>{
                         
                     </div>
                 </div>
-                <div className="maidsProfiles mt-2">
+                <div className="maidsProfiles mt-2 min-h-screen max-h-full">
                 <div>
                     <div className="w-full border rounded-2xl border-solid p-6">
                         {currentItems.map((maid) => (

@@ -11,22 +11,19 @@ const MaidProfile = ({maid}) =>{
             }
                 
                 <div className="profileLeftSide">
-                <div className="maidImage">
-                <div className="maidImage">
-                {maid.maidImg && maid.maidImg.includes("uploads/") ? (
-                    <img
-                    className="w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top"
-                    src={`${import.meta.env.VITE_API_URL}${maid.maidImg}`}
-                    />
-                ) : (
-                    <img
-                    className="w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top"
-                    src={`https://res.cloudinary.com/dtcz2zuev/image/upload/${maid.maidImg}`}
-                    />
-                )}
-                </div>
-
-                </div>
+                        <div className="maidImage">
+                        {maid.maidImg && maid.maidImg.includes("uploads/") ? (
+                            <img
+                            className="w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top"
+                            src={`${import.meta.env.VITE_API_URL}${maid.maidImg}`}
+                            />
+                        ) : (
+                            <img
+                            className="w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top"
+                            src={`https://res.cloudinary.com/dtcz2zuev/image/upload/${maid.maidImg}`}
+                            />
+                        )}
+                        </div>
                     <Link to={`/details/${maid._id}`} className="hidden lg:inline-block">
                         <div className="ctaBtn border flex items-center justify-center border-[#107243] p-3 text-sm mt-4 font-semibold cursor-pointer rounded-2xl text-[#107243]">
                             See Profile

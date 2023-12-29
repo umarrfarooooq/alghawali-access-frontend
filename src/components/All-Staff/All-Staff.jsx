@@ -69,7 +69,7 @@ const AllStaff = () =>{
                         </div>
                     </div>
                 </div>
-                <div className="staffProfiles mt-2">
+                <div className="staffProfiles mt-2 min-h-screen max-h-full">
                 <div>
                     <div className="w-full border border-solid p-6">
                     {filteredStaffData.map((staff) => (

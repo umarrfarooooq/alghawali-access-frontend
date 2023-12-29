@@ -9,6 +9,7 @@ const MaidDetails = lazy(() => import('./Pages/MaidDetails'));
 const Home = lazy(() => import('./Pages/Home'));
 const Login = lazy(() => import('./components/Auth/Login'));
 const Accounts = lazy(() => import('./Pages/Accounts'));
+const Visa = lazy(() => import('./Pages/Visa'));
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/accounts" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <Accounts /> : <Navigate to="/" />} />
           <Route path="/staff" element={valid && userRoles.includes(roles.ShowAccessOnAddStaff) ? <Staff /> : <Navigate to="/" />} />
           <Route path="/details/:maidID" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <MaidDetails /> : <Navigate to="/" />} />
+          <Route path="/visa" element={valid ? <Visa /> : <Navigate to="/" />} />
           <Route path="/login" element={!valid ? <Login /> : <Navigate to="/" />} />
         </Routes>
       </Suspense>

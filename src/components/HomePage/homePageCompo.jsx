@@ -53,7 +53,7 @@ const HomePageCompo = () =>{
 
     return(
         <>
-        {accountDetails && <div className="md:ml-[20rem] md:px-8 px-4">
+        {accountDetails && <div className="md:ml-[20rem] md:px-8 px-4 min-h-screen max-h-full">
                 <div className="relative">
                     
                     <div className="maidsProfiles mt-2">
