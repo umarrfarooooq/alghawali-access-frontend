@@ -20,7 +20,7 @@ const UpdateCostumerForm = ({ onCloseForm, costumerDetails }) =>{
         const formData = new FormData(e.currentTarget);
         try {
           const response = await axiosInstense.put(
-            `api/v1/maids/hiring/update/${costumerDetails._id}`,
+            `api/v1/maids/hiring/edit/${costumerDetails._id}`,
             formData,
             {
               headers: {
@@ -44,6 +44,9 @@ const UpdateCostumerForm = ({ onCloseForm, costumerDetails }) =>{
             [fieldName]: value,
         }));
     };
+    const getDefaultDate = updatedCostumerDetails.hiringDate;
+    const defaultDate = getDefaultDate ? new Date(getDefaultDate).toISOString().slice(0, 10) : '';
+
         return(
         <>
             <div className="bg-[#F2F5FF] h-screen overflow-auto p-3 sm:p-8 rounded-2xl shadow-lg">
@@ -68,7 +71,7 @@ const UpdateCostumerForm = ({ onCloseForm, costumerDetails }) =>{
                                 <label className="form-label block text-xl">Customer Name</label>
                                 <input  value={updatedCostumerDetails.fullName} onChange={(e) => handleInputChange(e.target.value, 'fullName')} type="text" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="fullName" />
                             </div>
-                            <div className="mb-4">
+                            {/* <div className="mb-4">
                                 <label className="form-label block text-xl">Total Amount</label>
                                 <input onChange={(e) => handleInputChange(e.target.value, 'totalAmount')} value={updatedCostumerDetails.totalAmount} type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="totalAmount" />
                             </div>
@@ -76,6 +79,30 @@ const UpdateCostumerForm = ({ onCloseForm, costumerDetails }) =>{
                             <div class="mb-4">
                                 <label className="form-label block text-xl">Advance Amount</label>
                                 <input onChange={(e) => handleInputChange(e.target.value, 'advanceAmount')} value={updatedCostumerDetails.advanceAmount} type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="advanceAmount" />
+                            </div> */}
+                            <div className="md:flex items-center justify-between md:flex-row">
+                                <div class="mb-4">
+                                    <label className="form-label block text-xl">Payment Method</label>
+                                    <select value={updatedCostumerDetails.paymentMethod} onChange={(e) => handleInputChange(e.target.value, 'paymentMethod')} name="paymentMethod" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Cheque">Cheque</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label className="form-label block text-xl">Received By</label>
+                                    <select value={updatedCostumerDetails.receivedBy} onChange={(e) => handleInputChange(e.target.value, 'receivedBy')} name="receivedBy" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
+                                        <option value="Riya">Riya</option>
+                                        <option value="Leena">Leena</option>
+                                        <option value="Jitan">Jitan</option>
+                                        <option value="Ali">Ali</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label className="form-label block text-xl">Hiring Date</label>
+                                <input defaultValue={defaultDate} onChange={(e) => handleInputChange(e.target.value, 'hiringDate')} type="date" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="hiringDate" />
                             </div>
                             <div class="mb-4">
                                 <label className="form-label block text-xl">Customer Ph#</label>

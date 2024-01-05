@@ -11,7 +11,7 @@ const axiosInstense = axios.create({
   })
   
   
-const AllVisas = () =>{
+const AllVisas = ({searchTerm}) =>{
 
     const {verifyToken , roles: userRoles} = VerifyStaffToken();
     const [visaData, setVisaData] = useState([]);
@@ -42,6 +42,7 @@ const calculateRemainingDays = (endDate) => {
         try {
           const response = await axiosInstense.get("api/v1/visa",
             {
+              params: { search: searchTerm },
               headers: {
                 Authorization:
                 `Bearer ${verifyToken}`,

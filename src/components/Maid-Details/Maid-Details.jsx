@@ -10,6 +10,7 @@ import axios from "axios";
 import roles from '../roles/roles';
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 import UpdateCostumerForm from "../Hirings/Update-Costumer-form";
+import UpdatePaymentForm from "../Hirings/Update-Payment-form";
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -26,6 +27,7 @@ const MaidDetailComponent = () =>{
     const [isHiredFormVisible, setIsHiredFormVisible] = useState(false);
     const [isListAgainFormVisible, setIsListAgainFormVisible] = useState(false);
     const [isUpdateCostumerFormVisible, setIsUpdateCostumerFormVisible] = useState(false);
+    const [isUpdatePaymentFormVisible, setIsUpdatePaymentFormVisible] = useState(false);
     const [activeTab, setActiveTab] = useState("profileInfo");
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
     const handleTabClick = (tab) => {
@@ -73,25 +75,8 @@ const MaidDetailComponent = () =>{
         };
     
         fetchMaidHistory();
-      }, [maidID, activeTab, isUpdateCostumerFormVisible]);
+      }, [maidID, activeTab, isUpdateCostumerFormVisible, isUpdatePaymentFormVisible]);
 
-    // const handleMarkAsHired = async () =>{
-    //     try {
-    //         const response = await axiosInstense.put(`api/v1/maids/availablity/${maidDetails._id}`,
-    //           null,
-    //           {
-    //             headers: {
-    //               Authorization:
-    //               `Bearer ${verifyToken}`,
-    //             },
-    //           }
-    //         );
-    //         window.location.href = "/maids"
-      
-    //       } catch (error) {
-    //         console.error("Error marking maid as hired:", error);
-    //       }
-    // }
 
    const handleDeleteMaid = async () =>{
         try {
@@ -123,6 +108,10 @@ const MaidDetailComponent = () =>{
         setSelectedCustomerId(customerId);
         setIsUpdateCostumerFormVisible(prevState => !prevState);
     }
+    const toggleUpdatePaymentFormVisibility = (customerId) => {
+        setSelectedCustomerId(customerId);
+        setIsUpdatePaymentFormVisible(prevState => !prevState);
+    }
 
     const toggleModal = () => {
       setShowModal(prevState => !prevState);
@@ -133,6 +122,7 @@ const MaidDetailComponent = () =>{
             {isHiredFormVisible && <Backdrop showBackdrop={true} />}
             {isListAgainFormVisible && <Backdrop showBackdrop={true} />}
             {isUpdateCostumerFormVisible && <Backdrop showBackdrop={true} />}
+            {isUpdatePaymentFormVisible && <Backdrop showBackdrop={true} />}
 
                 
 
@@ -163,6 +153,22 @@ const MaidDetailComponent = () =>{
                             key={customer._id}
                             costumerDetails={customer}
                             onCloseForm={toggleUpdateCostumerFormVisibility}
+                            />
+                        );
+                        }
+                        return null;
+                    })}
+                    </aside>
+                )}
+                {isUpdatePaymentFormVisible && (
+                    <aside className="absolute z-[20] right-0 w-screen sm:w-auto sm:mr-8 -mt-8">
+                       {maidHistory.map((customer) => {
+                        if (customer._id === selectedCustomerId) {
+                        return (
+                            <UpdatePaymentForm
+                            key={customer._id}
+                            costumerDetails={customer}
+                            onCloseForm={toggleUpdatePaymentFormVisibility}
                             />
                         );
                         }
@@ -356,15 +362,22 @@ const MaidDetailComponent = () =>{
                 </div>
                 }
                 
-                {maidHistory && maidHistory.length > 0 && activeTab === 'profileHistory' && (
+                {maidHistory &&
+                maidHistory.length > 0 &&
+                activeTab === 'profileHistory' && (
                     <div>
-                        {maidHistory.map((maidHistoryDetails) => (
-                            <div key={maidHistoryDetails._id}>
-                                <MaidHistoryCard onClick={() => toggleUpdateCostumerFormVisibility(maidHistoryDetails._id)} maidHistoryDetails={maidHistoryDetails} />
-                            </div>
-                        ))}
+                    {maidHistory.slice().reverse().map((maidHistoryDetails) => (
+                        <div key={maidHistoryDetails._id}>
+                        <MaidHistoryCard
+                            onClick={() => toggleUpdateCostumerFormVisibility(maidHistoryDetails._id)}
+                            paymentForm={() => toggleUpdatePaymentFormVisibility(maidHistoryDetails._id)}
+                            maidHistoryDetails={maidHistoryDetails}
+                        />
+                        </div>
+                    ))}
                     </div>
                 )}
+
                 
             </div>
             
