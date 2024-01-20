@@ -3,14 +3,18 @@ import HomeCard from "../HomePage/HomeCard";
 import axios from "axios";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 import AccountsPaymentHistory from "./Accounts-Payment-History";
+import AllPaymentDetailsPopup from "./All-Payments-Details";
+import Backdrop from "../UI/Backdrop";
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
   })
   
 const AccountsCompo = () =>{
+    const [selectedUser, setSelectedUser] = useState(null);
     const [accountDetails, setAccountDetails] = useState(null)
     const {verifyToken} = VerifyStaffToken();
+    const [isFormVisible, setIsFormVisible] = useState(false);
     const [activeTab, setActiveTab] = useState("totalPayment");
     const handleTabClick = (tab) => {
       setActiveTab(tab);
@@ -35,10 +39,24 @@ const AccountsCompo = () =>{
         fetchAccountHistory();
       }, []);
 
+      const handleUserSelection = (userName) => {
+        setSelectedUser(userName);
+      };
+    
+      const toggleFormVisibility = () => {
+        setIsFormVisible(prevState => !prevState);
+      };
 
+      
+      const users = ['Riya', 'Leena', 'Jitan', 'Ali'];
     return(
         <>
-        {accountDetails && <div className="md:ml-[20rem] min-h-screen max-h-full md:px-8 px-4">
+        {selectedUser && <Backdrop showBackdrop={true} />}
+        {accountDetails && <div className="md:ml-[20rem] relative min-h-screen max-h-full md:px-8 px-4">
+                { selectedUser && <aside className="absolute z-[20] right-0 -mt-8">
+                  <AllPaymentDetailsPopup onCloseForm={() => setSelectedUser(null)} userDetails={accountDetails.receivedByTotal[selectedUser]}/>
+                </aside>
+                }
         <div>
                     <div className="bg-[#E3E3E3] my-4 rounded-xl md:px-4 px-2 py-2 w-full gap-2 flex items-center justify-between">
                         <div onClick={() => handleTabClick("totalPayment")} className={`${activeTab === "totalPayment" ? "bg-[#FFFBFA] , shadow-md" : ""} transition-all rounded-lg gap-2 md:px-4 px-2 py-4 w-full flex items-center justify-center cursor-pointer`}>
@@ -63,19 +81,31 @@ const AccountsCompo = () =>{
                         </div>
                     </div>
                 </div>
+                
                 {activeTab === "totalPayment" &&  <div className="relative">
                     <div className="maidsProfiles mt-2">
                     <div className="flex flex-col gap-y-8">
-                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
-                            <HomeCard cardTxt="Total Amount (Advance)" total={accountDetails.totalAdvanceAmount} count={accountDetails.totalAdvanceAmount}/>
-                            <HomeCard cardTxt="Balance (Remaining)" total={accountDetails.balanceAmount} count={accountDetails.balanceAmount}/>
-                            <HomeCard cardTxt="Return Amount" total={accountDetails.totalReturnAmount} count={accountDetails.totalReturnAmount}/>
+                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
+                              <HomeCard cardTxt="Total Amount (Advance)" total={accountDetails.totalAdvanceAmount} count={accountDetails.totalAdvanceAmount}/>
+                              <HomeCard cardTxt="Balance (Remaining)" total={accountDetails.balanceAmount} count={accountDetails.balanceAmount}/>
+                              <HomeCard cardTxt="Return Amount" total={accountDetails.totalReturnAmount} count={accountDetails.totalReturnAmount}/>
                         </div>
-                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
-                            <HomeCard cardTxt="Riya Received" total={`${accountDetails.receivedByTotal.Riya} OMR`} count={`${accountDetails.receivedByTotal.Riya} OMR`}/>
-                            <HomeCard cardTxt="Leena Received" total={`${accountDetails.receivedByTotal.Leena} OMR`} count={`${accountDetails.receivedByTotal.Leena} OMR`}/>
-                            <HomeCard cardTxt="Jitan Received" total={`${accountDetails.receivedByTotal.Jitan} OMR`} count={`${accountDetails.receivedByTotal.Jitan} OMR`}/>
-                            <HomeCard cardTxt="Ali Received" total={`${accountDetails.receivedByTotal.Ali} OMR`} count={`${accountDetails.receivedByTotal.Ali} OMR`}/>
+                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
+                          {users.map((user) => (
+                            <div key={user} onClick={() => handleUserSelection(user)}>
+                              <HomeCard
+                                cursor="true"
+                                detailsPopUp={toggleFormVisibility}
+                                cardTxt={`${user} Received`}
+                                total={`${accountDetails.receivedByTotal[user].total} OMR`}
+                                count={`${accountDetails.receivedByTotal[user].total} OMR`}
+                              />
+                            </div>
+                          ))}
+                            {/* <HomeCard detailsPopUp={toggleFormVisibility} cardTxt="Riya Received" total={`${accountDetails.receivedByTotal.Riya.total} OMR`} count={`${accountDetails.receivedByTotal.Riya.total} OMR`}/>
+                            <HomeCard detailsPopUp={toggleFormVisibility} cardTxt="Leena Received" total={`${accountDetails.receivedByTotal.Leena.total} OMR`} count={`${accountDetails.receivedByTotal.Leena.total} OMR`}/>
+                            <HomeCard detailsPopUp={toggleFormVisibility} cardTxt="Jitan Received" total={`${accountDetails.receivedByTotal.Jitan.total} OMR`} count={`${accountDetails.receivedByTotal.Jitan.total} OMR`}/>
+                            <HomeCard detailsPopUp={toggleFormVisibility} cardTxt="Ali Received" total={`${accountDetails.receivedByTotal.Ali.total} OMR`} count={`${accountDetails.receivedByTotal.Ali.total} OMR`}/> */}
                         </div>
                     </div>
                     </div>

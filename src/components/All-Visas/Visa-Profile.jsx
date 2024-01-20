@@ -108,11 +108,12 @@ const VisaProfile = ({visa}) =>{
 
     const extensionHistory = visa.extensionHistory;
     return(
+
         <>
         {showEditExtendForm && <Backdrop showBackdrop={true} />}
             <div className="profileCard bg-[#FFFBFA] rounded-lg relative border border-solid p-4 mb-4 shadow-md">
             {showEditExtendForm && (
-                    <aside className="absolute z-[20] right-0 w-screen sm:w-auto sm:mr-8 -mt-8">
+                    <aside className="absolute z-[20] right-0 -mt-8">
                     <UpdateOrExtendVisaForm visaValueData={visa} onCloseForm={toggleFormVisibility} />
                     </aside>
             )}

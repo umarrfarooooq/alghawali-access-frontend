@@ -407,7 +407,7 @@ const AddMaidForm = ({ onCloseForm }) =>{
                             <div>
                             <div class="mb-4">
                                 <label class="block text-xl">Remarks</label>
-                                <input value="She is good at cleaning, washing, ironing, and baby care. She is willing to learn cooking." type="text" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="remarks" />
+                                <input defaultValue="She is good at cleaning, washing, ironing, and baby care. She is willing to learn cooking." type="text" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="remarks" />
                             </div>
                             </div>
 

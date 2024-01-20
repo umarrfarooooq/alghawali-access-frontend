@@ -72,7 +72,7 @@ const calculateRemainingDays = (endDate) => {
             <div className="md:ml-[20rem] md:px-8 px-4">
             <div className="relative">
                 {isFormVisible && (
-                    <aside className="absolute z-[20] right-0 -mt-8">
+                    <aside className="absolute z-[20] right-0 -mt-8 w-full sm:w-auto">
                     <AddVisaForm onCloseForm={toggleFormVisibility} />
                     </aside>
                 )}

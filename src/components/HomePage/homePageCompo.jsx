@@ -58,24 +58,19 @@ const HomePageCompo = () =>{
                     
                     <div className="maidsProfiles mt-2">
                     <div className="flex flex-col gap-y-8">
-                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
+                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
                             <HomeCard  count="00" total="00"/>
                             <HomeCard svg={svg1} cardTxt="Planned Interviews" count="00" total="00"/>
                             <HomeCard svg={svg2} cardTxt="Maids Hidden From Main Site" count="00" total="00"/>
                             <HomeCard svg={svg3} cardTxt="Total Number Of Non-Hire Maids" count="00" total="00"/>
                         </div>
-                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
+                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
                             <HomeCard cardTxt="Total Amount (Advance)" total={accountDetails.totalAdvanceAmount} count={accountDetails.totalAdvanceAmount}/>
                             <HomeCard cardTxt="Balance (Remaining)" total={accountDetails.balanceAmount} count={accountDetails.balanceAmount}/>
                             <HomeCard cardTxt="Return Amount" total={accountDetails.totalReturnAmount} count={accountDetails.totalReturnAmount}/>
                             <HomeCard />
                         </div>
-                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 flex items-center justify-between border border-solid p-6">
-                            <HomeCard />
-                            <HomeCard />
-                            <HomeCard />
-                            <HomeCard />
-                        </div>
+                        
                     </div>
                     </div>
                 </div>

@@ -41,7 +41,7 @@ const StaffProfile = ({staff}) =>{
     const toggleModal = () => {
       setShowModal(prevState => !prevState);
     };
-    const truncatedPassword = staff.password.length > 10 ? `${staff.password.slice(0, 10)}...` : staff.password;
+    const truncatedPassword = staff.password && staff.password.length > 10 ? `${staff.password.slice(0, 10)}...` : staff.password;
 
     return(
         <>
@@ -66,7 +66,7 @@ const StaffProfile = ({staff}) =>{
                             <div className="flex flex-col md:flex-row items-center justify-between overflow-x-auto gap-y-4 gap-x-8 mt-4">
                                 <div className="dashboardId w-full">
                                     <div className="text-xs">Dashboard Id</div>
-                                    <div className="text-sm font-semibold">{staff.email}</div>
+                                    <div className="text-sm font-semibold">{staff.email || staff.phoneNumber}</div>
                                 </div>
                                 <div className="password w-full">
                                     <div className="text-xs">Password</div>

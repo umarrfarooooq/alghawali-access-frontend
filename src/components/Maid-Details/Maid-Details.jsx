@@ -11,6 +11,7 @@ import roles from '../roles/roles';
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 import UpdateCostumerForm from "../Hirings/Update-Costumer-form";
 import UpdatePaymentForm from "../Hirings/Update-Payment-form";
+import InviteLinkModal from "../UI/Invite-Link-Popup";
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -116,6 +117,7 @@ const MaidDetailComponent = () =>{
     const toggleModal = () => {
       setShowModal(prevState => !prevState);
     };
+    
     return(
         <>
             {isFormVisible && <Backdrop showBackdrop={true} />}

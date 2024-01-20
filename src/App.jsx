@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Suspense, lazy } from 'react';
 import {VerifyStaffToken} from "./components/Auth/VerifyToken"
 import roles from './components/roles/roles';
+import InvitedSignup from './components/Auth/Invited-Signup';
 const OurMaids = lazy(() => import('./Pages/OurMaids'));
 const Staff = lazy(() => import('./Pages/Staff'));
 const MaidDetails = lazy(() => import('./Pages/MaidDetails'));
@@ -26,6 +27,7 @@ function App() {
           <Route path="/details/:maidID" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <MaidDetails /> : <Navigate to="/" />} />
           <Route path="/visa" element={valid ? <Visa /> : <Navigate to="/" />} />
           <Route path="/login" element={!valid ? <Login /> : <Navigate to="/" />} />
+          <Route path="/signup/:invitedToken" element={<InvitedSignup />} />
         </Routes>
       </Suspense>
     </Router>
