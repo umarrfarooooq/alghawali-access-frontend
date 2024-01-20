@@ -86,49 +86,49 @@ const AddStaffForm = ({ onCloseForm }) =>{
                             <div className="roles">
                                 <div className="mb-4">
                                     <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
-                                        <label htmlFor="agentReq" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Show “Agents Requests” to this member?</label>
+                                        <label htmlFor="agentReq" class="mb-2 text-sm md:text-base font-medium text-[#434146]">Show “Agents Requests” to this member?</label>
                                         <input  onChange={handleCheckboxChange} name="roles[]" id="agentReq" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
                                 <div className="mb-4">
                                     <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
-                                        <label htmlFor="selfApplied" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Show “Self Applied” to this member?</label>
+                                        <label htmlFor="selfApplied" class="mb-2 text-sm md:text-base font-medium text-[#434146]">Show “Self Applied” to this member?</label>
                                         <input  onChange={handleCheckboxChange} name="roles[]" id="selfApplied" type="checkbox" value="2" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
                                 <div className="mb-4">
                                     <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
-                                        <label htmlFor="plannedInterviews" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Show “Planned Interviews” to this member?</label>
+                                        <label htmlFor="plannedInterviews" class="mb-2 text-sm md:text-base font-medium text-[#434146]">Show “Planned Interviews” to this member?</label>
                                         <input  onChange={handleCheckboxChange} name="roles[]" id="plannedInterviews" type="checkbox" value="4" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
                                 <div className="mb-4">
                                     <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
-                                        <label htmlFor="ourMaids" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Show “Our Maids” to this member?</label>
+                                        <label htmlFor="ourMaids" class="mb-2 text-sm md:text-base font-medium text-[#434146]">Show “Our Maids” to this member?</label>
                                         <input  onChange={handleCheckboxChange} name="roles[]" id="ourMaids" type="checkbox" value="8" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
                                 <div className="mb-4">
                                     <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
-                                        <label htmlFor="addMaid" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Can “Add Maid”?</label>
+                                        <label htmlFor="addMaid" class="mb-2 text-sm md:text-base font-medium text-[#434146]">Can “Add Maid”?</label>
                                         <input  onChange={handleCheckboxChange} name="roles[]" id="addMaid" type="checkbox" value="16" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
                                 <div className="mb-4">
                                     <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
-                                        <label htmlFor="canAddStaff" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Can Add or Delete Staff?</label>
+                                        <label htmlFor="canAddStaff" class="mb-2 text-sm md:text-base font-medium text-[#434146]">Can Add or Delete Staff?</label>
                                         <input  onChange={handleCheckboxChange} name="roles[]" id="canAddStaff" type="checkbox" value="32" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
                                 <div className="mb-4">
                                     <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
-                                        <label htmlFor="canEditMaid" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Can Edit Maid?</label>
+                                        <label htmlFor="canEditMaid" class="mb-2 text-sm md:text-base font-medium text-[#434146]">Can Edit Maid?</label>
                                         <input  onChange={handleCheckboxChange} name="roles[]" id="canEditMaid" type="checkbox" value="64" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
                                 <div className="mb-4">
                                     <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
-                                        <label htmlFor="canAccessOnAccounts" class="mb-2 text-sm md:text-base font-medium text-[#434146] dark:text-gray-300">Have Access On Accounts or Maid History?</label>
+                                        <label htmlFor="canAccessOnAccounts" class="mb-2 text-sm md:text-base font-medium text-[#434146]">Have Access On Accounts or Maid History?</label>
                                         <input  onChange={handleCheckboxChange} name="roles[]" id="canAccessOnAccounts" type="checkbox" value="128" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
