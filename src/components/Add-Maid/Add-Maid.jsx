@@ -8,7 +8,7 @@ const axiosInstense = axios.create({
 
 
 const AddMaidForm = ({ onCloseForm }) =>{
-    const {verifyToken, staffName} = VerifyStaffToken();
+    const {verifyToken, staffName, staffId} = VerifyStaffToken();
     const [errorMessage, setErrorMessage] = useState(false)
     const [spinningLoader, setSpinningLoader] = useState(false)
     const [showOtherReligion, setShowOtherReligion] = useState(false);
@@ -74,6 +74,7 @@ const AddMaidForm = ({ onCloseForm }) =>{
       setSpinningLoader(true)
       const formData = new FormData(event.currentTarget);
       formData.append('addedBy', staffName)
+      formData.append('staffId', staffId)
       let isValid = true;
 
       const fieldsToValidate = [

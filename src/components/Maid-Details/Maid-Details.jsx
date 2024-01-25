@@ -239,14 +239,14 @@ const MaidDetailComponent = () =>{
                                     </svg>
                                     </div>
                                 </div>}
-                                
-                                <div onClick={toggleModal} className="deleteMaid cursor-pointer p-3 bg-[#EBEBEB] rounded-2xl">
+                                {userRoles.includes(roles.ShowOurMaid) && <div onClick={toggleModal} className="deleteMaid cursor-pointer p-3 bg-[#EBEBEB] rounded-2xl">
                                     <div>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                         <path d="M9.17 4.0005C9.3766 3.41496 9.75974 2.90793 10.2666 2.54929C10.7735 2.19064 11.3791 1.99805 12 1.99805C12.6209 1.99805 13.2265 2.19064 13.7334 2.54929C14.2403 2.90793 14.6234 3.41496 14.83 4.0005M20.5 6.0005H3.5M18.833 8.5005L18.373 15.4005C18.196 18.0545 18.108 19.3815 17.243 20.1905C16.378 21.0005 15.047 21.0005 12.387 21.0005H11.613C8.953 21.0005 7.622 21.0005 6.757 20.1905C5.892 19.3815 5.803 18.0545 5.627 15.4005L5.167 8.5005M9.5 11.0005L10 16.0005M14.5 11.0005L14 16.0005" stroke="#CD2424" stroke-width="1.5" stroke-linecap="round"/>
                                     </svg>
                                     </div>
-                                </div>
+                                </div>}
+                                
                             </div>
                         </div>
                     </div>

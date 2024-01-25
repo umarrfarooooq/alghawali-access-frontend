@@ -87,7 +87,7 @@ const Sidebar = () => {
                                 <span className="ms-3 text-base">Home</span>
                                 </Link>
                         </li>
-                            {userRoles.includes(roles.CanAddMaid) || userRoles.includes(roles.ShowOurMaid) ?
+                            
                                 <li>
                                     <Link to="/maids" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -99,8 +99,7 @@ const Sidebar = () => {
                                     </svg>
                                     <span className="ms-3 text-base">Our Maids</span>
                                     </Link>
-                            </li> : null
-                            }
+                            </li>
                             {userRoles.includes(roles.ShowAccessOnAddStaff) && <li>
                                 <Link to="/staff" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -113,7 +112,7 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                         }
-                        <li>
+                        {userRoles.includes(roles.canAccessOnAccounts) && <li>
                                 <Link to="/accounts" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
                                     <path d="M4.78906 7.63281L8.57854 7.63281" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -124,9 +123,9 @@ const Sidebar = () => {
                                 </svg>
                                 <span className="ms-3 text-base">Accounts</span>
                                 </Link>
-                        </li>
-                        <li>
-                                        <Link to="/visa" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
+                        </li>}
+                        {userRoles.includes(roles.canAccessOnVisa) && <li>
+                            <Link to="/visa" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width="24"
@@ -141,7 +140,8 @@ const Sidebar = () => {
                                             </svg>
                                             <span className="ms-3 text-base">Visas</span>
                                         </Link>
-                        </li>
+                        </li>}
+                        
                         
                         <li onClick={toggleModal}>
                             <a href="#" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
@@ -160,8 +160,8 @@ const Sidebar = () => {
                 
             </div>
             </aside>
-            
             {/* Desktop  */}
+
             <div className="hidden md:block">
                 <div className="flex">
                     <aside
@@ -206,7 +206,7 @@ const Sidebar = () => {
                                             <span className="ms-3 text-base">Home</span>
                                             </Link>
                                         </li>
-                                        {userRoles.includes(roles.CanAddMaid) || userRoles.includes(roles.ShowOurMaid) ? <li>
+                                         <li>
                                             <Link to="/maids" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                             <svg className='active:stroke-white' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                 <path d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15L9 15C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21" stroke="#434146" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -217,8 +217,7 @@ const Sidebar = () => {
                                             </svg>
                                             <span className="ms-3 text-base">Our Maids</span>
                                             </Link>
-                                        </li> : null
-                                        }
+                                        </li>
                                         {userRoles.includes(roles.ShowAccessOnAddStaff) && <li>
                                         <Link to="/staff" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -231,7 +230,7 @@ const Sidebar = () => {
                                         </Link>
                                         </li>
                                         }
-                                        <li>
+                                        {userRoles.includes(roles.canAccessOnAccounts) && <li>
                                         <Link to="/accounts" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
                                             <path d="M4.78906 7.63281L8.57854 7.63281" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -242,8 +241,9 @@ const Sidebar = () => {
                                         </svg>
                                             <span className="ms-3 text-base">Accounts</span>
                                         </Link>
-                                        </li>
-                                        <li>
+                                        </li>}
+
+                                        {userRoles.includes(roles.canAccessOnVisa) &&  <li>
                                         <Link to="/visa" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -261,7 +261,8 @@ const Sidebar = () => {
 
                                             <span className="ms-3 text-base">Visas</span>
                                         </Link>
-                                        </li>
+                                        </li>}
+                                       
                                     
                                     <li onClick={toggleModal}>
                                         <a href="#" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
@@ -275,7 +276,6 @@ const Sidebar = () => {
                                     </li>
                                     </ul>
                                 </div>
-                                
                         </div>
                     </div>
                     
@@ -284,9 +284,6 @@ const Sidebar = () => {
                 </div>
             </div>
             
-            
-        
-    
     </>
   );
 };

@@ -7,5 +7,6 @@ const roles = {
     ShowAccessOnAddStaff: 32,
     CanEditMaid: 64,
     canAccessOnAccounts: 128,
+    canAccessOnVisa: 256,
 };
 export default roles;

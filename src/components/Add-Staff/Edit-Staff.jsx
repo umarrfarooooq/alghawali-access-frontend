@@ -162,6 +162,13 @@ const EditStaffForm = ({ onCloseForm, staffValueData }) =>{
                                         <input onChange={(e) => handleCheckboxChange(e, 128)} checked={formData.roles.includes(128)} name="roles[]" id="canAccessOnAccounts" type="checkbox" value="128" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
+                                <div className="mb-4">
+                                    <div style={{borderBottom:".5px solid #C3D0D4"}} class="flex items-center justify-between gap-2 mb-4">
+                                        <label htmlFor="canAccessOnVisa" class="mb-2 text-sm md:text-base font-medium text-[#434146]">Have Access Visa System?</label>
+                                        <input onChange={(e) => handleCheckboxChange(e, 256)} checked={formData.roles.includes(256)} name="roles[]" id="canAccessOnVisa" type="checkbox" value="256" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-2xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    </div>
+                                </div>
+                                
                             </div>
                                 
                                 

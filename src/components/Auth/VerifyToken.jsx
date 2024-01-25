@@ -17,7 +17,8 @@ export const VerifyStaffToken = () => {
 
     const staffRoles = decoded.staffRoles;
     const staffName = decoded.staffName;
-    return { valid: true, roles: staffRoles, verifyToken:staffToken, staffName:staffName };
+    const staffId = decoded.staffId;
+    return { valid: true, roles: staffRoles, verifyToken:staffToken, staffName:staffName, staffId:staffId };
   } catch (error) {
     return { valid: false, roles: [] };
   }
