@@ -50,7 +50,7 @@ const AllStaff = () =>{
         <>
         {isFormVisible && <Backdrop showBackdrop={true} />}
         {isInviteFormVisible && <Backdrop showBackdrop={true} />}
-            <div className="md:ml-[20rem] md:px-8 px-4">
+            <div className="md:ml-[20rem] md:px-8 px-4 rounded-3xl">
             <div className="relative">
                 {isFormVisible && (
                         <aside className="absolute z-[20] right-0 -mt-8">
@@ -91,7 +91,7 @@ const AllStaff = () =>{
                 </div>
                 <div className="staffProfiles mt-2 min-h-screen max-h-full">
                 <div>
-                    <div className="w-full border border-solid p-6">
+                    <div className="w-full border border-solid p-6 rounded-3xl">
                     {filteredStaffData.map((staff) => (
                         <StaffProfile key={staff._id} staff={staff} />
                     ))}

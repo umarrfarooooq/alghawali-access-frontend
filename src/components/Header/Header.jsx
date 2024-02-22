@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/avatar.png"
 import { VerifyStaffToken } from "../Auth/VerifyToken";
+import logo from "../sidebar/logo.svg"
 
 const Header = ({ onClick, className, headerTxt }) =>{
 
@@ -13,9 +14,9 @@ const Header = ({ onClick, className, headerTxt }) =>{
             <div className="bg-[#253061] md:hidden">
                 <div className="flex items-center justify-between p-4">
                     <div className="leftSideHeader">
-                    <Link to="/">
-                        <img className="w-12 h-11" src="https://www.alghawalimanpower.com/static/media/Group%202.bb033483138d53c80d39856edff45090.svg"/>
-                    </Link>
+                        <Link to="/">
+                            <img className="w-12 h-11" src={logo}/>
+                        </Link>
                     </div>
                     <div className="rightSideHeader cursor-pointer"  onClick={onClick}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="21" height="14" viewBox="0 0 21 14" fill="none">

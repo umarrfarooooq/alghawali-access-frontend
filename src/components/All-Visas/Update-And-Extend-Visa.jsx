@@ -67,7 +67,6 @@ const UpdateOrExtendVisaForm = ({ onCloseForm, visaValueData: initialVisaValueDa
       let isValid = true;
 
       const fieldsToValidate = [
-        'newVisaEntryDate',
         'newVisaEndDate'
       ];
 
@@ -179,10 +178,6 @@ const UpdateOrExtendVisaForm = ({ onCloseForm, visaValueData: initialVisaValueDa
                         
                       {activeTab === "extendVisa" && <form onSubmit={handleExtendVisaFormSubmit}>
                             <div className="mb-4">
-                                <label class="form-label block text-xl">New Visa Start Date</label>
-                                <input type="date" class="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="newVisaEntryDate" />
-                            </div>
-                            <div className="mb-4">
                                 <label class="form-label block text-xl">New Visa End Date</label>
                                 <input type="date" class="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="newVisaEndDate" />
                             </div>
@@ -197,7 +192,7 @@ const UpdateOrExtendVisaForm = ({ onCloseForm, visaValueData: initialVisaValueDa
                                         </svg>
                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span></p>
                                     </div>
-                                    <input required id="primary-file" type="file"  name="visaFile" hidden />
+                                    <input id="primary-file" type="file"  name="visaFile" hidden />
                                 </label>
                             </div> 
 

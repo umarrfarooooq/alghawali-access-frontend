@@ -83,7 +83,11 @@ const AddVisaForm = ({ onCloseForm }) =>{
                         <form onSubmit={handleMaidFormSubmit}>
                             <div className="mb-4">
                                 <label class="form-label block text-xl">Full Name</label>
-                                <input type="text" class="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="maidName" />
+                                <input placeholder="Full Name" type="text" class="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="maidName" />
+                            </div>
+                            <div className="mb-4">
+                                <label class="form-label block text-xl">Passport No</label>
+                                <input placeholder="Passport No" type="text" class="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="passportNo" />
                             </div>
                             
                             <div class="mb-4">
@@ -96,8 +100,6 @@ const AddVisaForm = ({ onCloseForm }) =>{
                                 <input type="date" class="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="visaEndTime" />
                             </div>
                             
-                            
-
                             <label class="block text-xl">Maid Image</label>                                
                             <div className="flex items-center mb-4 justify-center w-full">
                                 <label htmlFor="primary-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -107,7 +109,7 @@ const AddVisaForm = ({ onCloseForm }) =>{
                                         </svg>
                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span></p>
                                     </div>
-                                    <input required id="primary-file" type="file"  name="maidImage" hidden />
+                                    <input id="primary-file" type="file"  name="maidImage" hidden />
                                 </label>
                             </div> 
 
@@ -120,7 +122,7 @@ const AddVisaForm = ({ onCloseForm }) =>{
                                         </svg>
                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span></p>
                                     </div>
-                                    <input required id="visa-file" type="file"  name="visaFile" hidden />
+                                    <input id="visa-file" type="file"  name="visaFile" hidden />
                                 </label>
                             </div> 
 

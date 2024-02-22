@@ -46,7 +46,7 @@ const StaffProfile = ({staff}) =>{
     return(
         <>
             {isFormVisible && <Backdrop showBackdrop={true} />}
-            <div className="StaffCard border border-solid p-4 mb-4 block lg:flex lg:items-start gap-4 shadow-md">
+            <div className="StaffCard bg-[#FFFBFA] rounded-xl border border-solid p-4 mb-4 block lg:flex lg:items-start gap-4 shadow-md">
             {isFormVisible && (
                     <aside className="absolute z-[20] right-0 w-screen sm:w-auto sm:mr-8 -mt-8">
                     <EditStaffForm staffValueData={staff} onCloseForm={toggleFormVisibility} />

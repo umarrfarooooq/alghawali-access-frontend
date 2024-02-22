@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Modal = ({name, showModal, toggleModal, modalTxt, confirmTxt, modalAction}) =>{
-    
+    const [animationClass, setAnimationClass] = useState("");
+
+  useEffect(() => {
+    setAnimationClass(showModal ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none");
+  }, [showModal]);
+
     return(
         <>
             <div>
@@ -9,8 +14,7 @@ const Modal = ({name, showModal, toggleModal, modalTxt, confirmTxt, modalAction}
                     <div
                     id="popup-modal"
                     tabIndex="-1"
-                    className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full"
-                    >
+                    className={`fixed top-0 z-50 left-0 w-full h-full flex items-center justify-center ${animationClass} transition-opacity duration-300 ease-in-out`}>
                     <div className="absolute inset-0 bg-gray-700 opacity-50" onClick={toggleModal}></div>
                     <div className="relative bg-white rounded-lg shadow w-full max-w-md">
                         <button

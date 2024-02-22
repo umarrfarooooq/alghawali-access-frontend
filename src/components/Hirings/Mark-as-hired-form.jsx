@@ -21,7 +21,7 @@ const MarkHiredForm = ({ onCloseForm }) =>{
         try {
           
           const response = await axiosInstense.post(
-            `api/v1/maids/hiring/${maidID}`,
+            `api/v1/customerAccounts/hiring/${maidID}`,
             formData,
             {
               headers: {

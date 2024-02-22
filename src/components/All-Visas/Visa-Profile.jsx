@@ -152,12 +152,14 @@ const VisaProfile = ({visa}) =>{
                                     </div>
                         </div>
                 <div className="block lg:flex lg:items-start gap-4 ">
+                
                     <div className="profileLeftSide">
                         <div className="maidImage">
-                            <img
+                        {visa.maidImage ? <img
                             className="w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top"
                             src={`${import.meta.env.VITE_API_URL}${visa.maidImage}`}
-                            />
+                            /> : <div className="w-full sm:w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top bg-slate-300 animate-pulse"></div>}
+                            
                         </div>
                     </div>
                     <div className="profileRightSide">
@@ -181,10 +183,15 @@ const VisaProfile = ({visa}) =>{
                                         {visa.hiringStatus ? <div className="text-sm text font-semibold text-[#0C8B3F]">
                                             Pause (Hired)
                                         </div> : <div className="text-sm font-semibold" style={{ color: textColor }}>
-                                            {remainingDays}
+                                            {remainingDays} <span className="text-black">({formatDate(visa.visaEndTime)})</span>
                                         </div>}
                                         
                                     </div>
+                                    {visa.passportNo && <div className="passportNo">
+                                        <div className="text-xs">Passport No</div>
+                                        <div className="text-sm font-semibold">{visa.passportNo}</div>
+                                    </div>}
+                                    
                                     <div className="childrens ">
                                         <div className="text-xs">Extended</div>
                                         <div className="text-sm font-semibold flex items-center gap-1">
@@ -215,7 +222,7 @@ const VisaProfile = ({visa}) =>{
                     </div>
                 </div>
                 
-                {historyOpen && <div className="extensionHistory">
+                {historyOpen && <div className="extensionHistory  mt-6">
                     <div className="historyBoxes bg-[#F2F2F2] p-4 rounded-lg">
                         {extensionHistory.map(history => (
                             <ExtensionHistory key={history._id} history={history} calculateRemainingDays={calculateRemainingDays} formatDate={formatDate} calculateVisaDuration={calculateVisaDuration} />

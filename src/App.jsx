@@ -11,6 +11,7 @@ const Home = lazy(() => import('./Pages/Home'));
 const Login = lazy(() => import('./components/Auth/Login'));
 const Accounts = lazy(() => import('./Pages/Accounts'));
 const Visa = lazy(() => import('./Pages/Visa'));
+const CustomRequirements = lazy(() => import('./Pages/CustomRequirements'));
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/staff" element={valid && userRoles.includes(roles.ShowAccessOnAddStaff) ? <Staff /> : <Navigate to="/" />} />
           <Route path="/details/:maidID" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <MaidDetails /> : <Navigate to="/" />} />
           <Route path="/visa" element={valid ? <Visa /> : <Navigate to="/" />} />
+          <Route path="/custom-requirements" element={valid ? <CustomRequirements /> : <Navigate to="/" />} />
           <Route path="/login" element={!valid ? <Login /> : <Navigate to="/" />} />
           <Route path="/signup/:invitedToken" element={<InvitedSignup />} />
         </Routes>

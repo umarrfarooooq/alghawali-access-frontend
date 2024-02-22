@@ -9,6 +9,7 @@ const axiosInstense = axios.create({
   
 const HomePageCompo = () =>{
     const [accountDetails, setAccountDetails] = useState(null)
+    const [maidsInfo, setMaidsInfo] = useState(null)
     const {verifyToken} = VerifyStaffToken();
 
     useEffect(() => {
@@ -29,6 +30,26 @@ const HomePageCompo = () =>{
         };
     
         fetchAccountHistory();
+      }, []);
+
+    useEffect(() => {
+        const fetchMaidsInfo = async () => {
+          try {
+            const response = await axiosInstense.get(
+              "api/v1/maids/maidsInfo",
+              {
+                headers: {
+                  Authorization: `Bearer ${verifyToken}`,
+                },
+              }
+            );
+            setMaidsInfo(response.data);
+          } catch (error) {
+            console.error("Error fetching maids:", error);
+          }
+        };
+    
+        fetchMaidsInfo();
       }, []);
 
 
@@ -55,14 +76,12 @@ const HomePageCompo = () =>{
         <>
         {accountDetails && <div className="md:ml-[20rem] md:px-8 px-4 min-h-screen max-h-full">
                 <div className="relative">
-                    
                     <div className="maidsProfiles mt-2">
                     <div className="flex flex-col gap-y-8">
                         <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
-                            <HomeCard  count="00" total="00"/>
-                            <HomeCard svg={svg1} cardTxt="Planned Interviews" count="00" total="00"/>
-                            <HomeCard svg={svg2} cardTxt="Maids Hidden From Main Site" count="00" total="00"/>
-                            <HomeCard svg={svg3} cardTxt="Total Number Of Non-Hire Maids" count="00" total="00"/>
+                            <HomeCard cardTxt="Total Maids" count={maidsInfo.totalMaids} total={maidsInfo.totalMaids}/>
+                            <HomeCard cardTxt="Hired Maids" count={maidsInfo.hiredMaids} total={maidsInfo.hiredMaids}/>
+                            <HomeCard svg={svg3} cardTxt="Total Number Of Non-Hire Maids" count={maidsInfo.remainingMaids} total={maidsInfo.remainingMaids}/>
                         </div>
                         <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
                             <HomeCard cardTxt="Total Amount (Advance)" total={accountDetails.totalAdvanceAmount} count={accountDetails.totalAdvanceAmount}/>
