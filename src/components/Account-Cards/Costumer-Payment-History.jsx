@@ -1,24 +1,41 @@
 const CostumerPaymentHistory = ({ paymentHistory, formatDate }) => {
     return (
         <>
-                <div key={history._id} className="historyRow p-3 flex items-center justify-between flex-wrap">
+                <div key={history._id} className="historyRow p-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
                     <div className="Entry">
                         <div className="text-xs">Payment Method</div>
                         <div className="text-sm font-semibold">{paymentHistory.paymentMethod}</div>
                     </div>
-                    <div className="Entry">
+
+                    {paymentHistory.returnAmount ? <div className="Entry">
+                        <div className="text-xs">Recturn Amount</div>
+                        <div className="text-sm font-semibold">{paymentHistory.returnAmount}</div>
+                    </div> : <div className="Entry">
                         <div className="text-xs">Received Amount</div>
                         <div className="text-sm font-semibold">{paymentHistory.receivedAmount}</div>
-                    </div>
-                    <div className="Entry">
+                    </div>}
+                    {paymentHistory.sendedBy ? <div className="Entry">
+                        <div className="text-xs">Sended By</div>
+                        <div className="text-sm font-semibold">{paymentHistory.sendedBy}</div>
+                    </div> : <div className="Entry">
                         <div className="text-xs">Received By</div>
                         <div className="text-sm font-semibold">{paymentHistory.receivedBy}</div>
-                    </div>
+                    </div> }
+                    
                     <div className="Entry">
                         <div className="text-xs">Date</div>
                         <div className="text-sm font-semibold">{formatDate(paymentHistory.date)}</div>
                     </div>
-                    {paymentHistory.paymentProof && <div className="Entry cursor-pointer bg-[#E3E3E3] p-3 rounded-2xl">
+                    <div className="Entry">
+                        <div className="text-xs">Add to Portal By</div>
+                        <div className="text-sm font-semibold">{paymentHistory.staffAccount}</div>
+                    </div>
+                    {paymentHistory.officeCharges && <div className="Entry">
+                        <div className="text-xs">Office Charges</div>
+                        <div className="text-sm font-semibold">{paymentHistory.officeCharges}</div>
+                    </div>}
+                    
+                    {paymentHistory.paymentProof && <div className="Entry justify-self-end w-fit cursor-pointer bg-[#E3E3E3] p-3 rounded-2xl">
                         <a href={`${import.meta.env.VITE_API_URL}${paymentHistory.paymentProof}`} download={`${import.meta.env.VITE_API_URL}${paymentHistory.paymentProof}`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M12.5533 16.5053C12.483 16.5821 12.3975 16.6435 12.3022 16.6855C12.2069 16.7275 12.1039 16.7492 11.9998 16.7492C11.8957 16.7492 11.7927 16.7275 11.6974 16.6855C11.6021 16.6435 11.5166 16.5821 11.4463 16.5053L7.4463 12.1303C7.3121 11.9833 7.24177 11.7891 7.25077 11.5903C7.25977 11.3915 7.34737 11.2045 7.4943 11.0703C7.64123 10.9361 7.83545 10.8657 8.03424 10.8747C8.23303 10.8837 8.4201 10.9713 8.5543 11.1183L11.2503 14.0683V2.99927C11.2503 2.80036 11.3293 2.60959 11.47 2.46894C11.6106 2.32829 11.8014 2.24927 12.0003 2.24927C12.1992 2.24927 12.39 2.32829 12.5306 2.46894C12.6713 2.60959 12.7503 2.80036 12.7503 2.99927V14.0673L15.4473 11.1173C15.5816 10.9705 15.7688 10.883 15.9676 10.8742C16.1664 10.8654 16.3605 10.9359 16.5073 11.0703C16.6541 11.2046 16.7415 11.3917 16.7503 11.5905C16.7591 11.7893 16.6886 11.9835 16.5543 12.1303L12.5533 16.5053Z" fill="#262F32"/>

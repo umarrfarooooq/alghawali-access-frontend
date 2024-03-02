@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import CostumerPaymentHistory from "./Costumer-Payment-History";
+import UpdateAccountPaymentForm from "./Update-Account-Payment-Form";
+import Backdrop from "../UI/Backdrop";
 
 const CostumerAccountDetails = ({ accountDetails }) => {
 
     const [historyOpen, setHistoryOpen] = useState(false)
+    const [showPaymentUpdateForm, setShowPaymentUpdateForm] = useState(false)
 
     const toggleHistoryBox = () =>{
         setHistoryOpen(!historyOpen)
@@ -16,16 +18,28 @@ const CostumerAccountDetails = ({ accountDetails }) => {
     };
     const paymentHistory = accountDetails.accountHistory || [];
     const sortedPaymentHistory = [...paymentHistory].sort((a, b) => {
-        const dateComparison = new Date(b.timestamp) - new Date(a.timestamp);
+        const dateComparison = new Date(b.date) - new Date(a.date);
         if (dateComparison === 0) {
           return b._id.localeCompare(a._id);
         }
         return dateComparison;
       }); 
-
+      const toggleFormVisibility = () => {
+        setShowPaymentUpdateForm(prevState => !prevState);
+      }
     return (
         <div className="bg-[#FFFBFA] p-4 rounded-lg">
-                <div key={history._id} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 historyRow p-3">
+        {showPaymentUpdateForm && <Backdrop showBackdrop={true}/>}
+                <div key={history._id} className="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 historyRow p-3">
+                    <div onClick={toggleFormVisibility} className="updatePaymentFromAccount absolute right-0">
+                        <div className="py-3 px-4 flex items-center justify-center hover:bg-[#0c8b3f2a] transition-all cursor-pointer border text-[#0C8B3F] border-[#0C8B3F] w-full rounded-lg">
+                            <span>Update</span>
+                        </div>
+                    </div>
+                    {showPaymentUpdateForm && <aside className="absolute z-[20] right-0 w-screen sm:w-auto sm:mr-8 -mt-8">
+                            <UpdateAccountPaymentForm accountDetails={accountDetails} onCloseForm={toggleFormVisibility} />
+                    </aside>}
+                    
                     <div className="Entry">
                         <div className="text-xs">Code</div>
                         <div className="text-sm font-semibold">{accountDetails.uniqueCode}</div>
@@ -42,25 +56,34 @@ const CostumerAccountDetails = ({ accountDetails }) => {
                         <div className="text-xs">Date</div>
                         <div className="text-sm font-semibold">{formatDate(accountDetails.timestamp)}</div>
                     </div>
-                    <div className="Entry">
+
+                    {accountDetails.profileHiringStatus === "Return" ? <div className="Entry">
+                        <div className="text-xs">Return Amount</div>
+                        <div className="text-sm font-semibold">{accountDetails.returnAmount}</div>
+                    </div> : <div className="Entry">
                         <div className="text-xs">Total Amount</div>
                         <div className="text-sm font-semibold">{accountDetails.totalAmount}</div>
-                    </div>
+                    </div>}
+                    
                     <div className="Entry">
                         <div className="text-xs">Received Amount</div>
                         <div className="text-sm font-semibold">{accountDetails.receivedAmount}</div>
                     </div>
-                    <div className="Entry">
+                    {accountDetails.profileHiringStatus === "Return" ? <div className="Entry">
+                        <div className="text-xs">Remaining Amount</div>
+                        <div className="text-sm font-semibold">{accountDetails.receivedAmount - accountDetails.returnAmount}</div>
+                    </div> : <div className="Entry">
                         <div className="text-xs">Remaining Amount</div>
                         <div className="text-sm font-semibold">{accountDetails.totalAmount - accountDetails.receivedAmount}</div>
-                    </div>
+                    </div>}
+                    
                     <div className="Entry">
                         <div className="text-xs">Profile Name</div>
                         <div className="text-sm font-semibold">{accountDetails.profileName}</div>
                     </div>
                     <div className="Entry">
                         <div className="text-xs">Profile Id</div>
-                        <div className="text-sm font-semibold">{accountDetails.profileId}</div>
+                        <div className="text-sm font-semibold">{accountDetails.profileCode}</div>
                     </div>
                     <div className="Entry">
                         <div className="text-xs">Profile Status</div>

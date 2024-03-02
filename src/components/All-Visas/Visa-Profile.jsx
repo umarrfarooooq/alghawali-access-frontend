@@ -35,11 +35,8 @@ const VisaProfile = ({visa}) =>{
         const diffInMs = Math.abs(end - start);
     
         const days = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-    
-        const months = Math.floor(days / 30);
-        const remainingDays = days % 30;
-    
-        return `${months}.${(remainingDays / 30 * 10).toFixed()} Months (${days} days)`;
+
+        return `${days} days`;
     };
     const calculateRemainingDays = (endDate) => {
         const end = new Date(endDate);
@@ -50,9 +47,9 @@ const VisaProfile = ({visa}) =>{
     
         if (days < 0) {
             const lateDays = Math.abs(days);
-            return `${lateDays} Days Late`;
+            return `${lateDays} Days Over Stay`;
         } else if (days === 0) {
-            return 'last day';
+            return 'Last Day';
         }
     
         return `${days} Days`;
@@ -95,13 +92,16 @@ const VisaProfile = ({visa}) =>{
 
     const remainingDays = calculateRemainingDays(visa.visaEndTime);
     let textColor = '#000';
-    if (remainingDays.includes('Days Late')) {
-        textColor = '#FFD700'; 
+    if (remainingDays.includes('Days Over Stay')) {
+        textColor = '#CD2424'; 
+      }
+      if (remainingDays.includes('Last Day')) {
+        textColor = '#CD2424'; 
       } else {
         const days = parseInt(remainingDays);
         if (days < 4) {
-          textColor = '#FF0000'; 
-        } else if (days < 10) {
+          textColor = '#CD2424'; 
+        } else if (days < 10 && days > 4 && !remainingDays.includes('Days Over Stay')) {
           textColor = '#FFA500';
         }
       }
@@ -158,7 +158,7 @@ const VisaProfile = ({visa}) =>{
                         {visa.maidImage ? <img
                             className="w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top"
                             src={`${import.meta.env.VITE_API_URL}${visa.maidImage}`}
-                            /> : <div className="w-full sm:w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top bg-slate-300 animate-pulse"></div>}
+                            /> : <div className="w-full sm:w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top bg-slate-300"></div>}
                             
                         </div>
                     </div>
@@ -175,7 +175,7 @@ const VisaProfile = ({visa}) =>{
                                         <div className="text-sm font-semibold">{formatDate(visa.dateEntry)}</div>
                                     </div>
                                     <div className="religion ">
-                                        <div className="text-xs">Visa Time</div>
+                                        <div className="text-xs">Visa Duration</div>
                                         <div className="text-sm font-semibold">{calculateVisaDuration(visa.dateEntry, visa.visaEndTime)}</div>
                                     </div>
                                     <div className="maritalStatus ">

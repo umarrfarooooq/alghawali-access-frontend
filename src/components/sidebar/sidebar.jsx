@@ -174,6 +174,7 @@ const Sidebar = () => {
                 <div className="flex">
                     <aside
                     id="default-sidebar"
+                    style={{borderRight:"1px solid #C3D0D4"}}
                     className="fixed top-0 hidden md:block left-0 z-[5] w-[20rem] max-h-full overflow-y-auto min-h-full transition-transform md:translate-x-0 bg-[#F2F5FF]"
                     aria-label="Sidebar"
                     >

@@ -1,19 +1,17 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
   })
 
-const UpdatePaymentForm = ({ onCloseForm, costumerDetails }) =>{
-    const [updatedCostumerDetails, setUpdatedCostumerDetails] = useState(costumerDetails);
+const UpdateAccountPaymentForm = ({ onCloseForm, accountDetails }) =>{
     const {verifyToken, staffName} = VerifyStaffToken();
-    const {maidID} = useParams();
     const [errorMessage, setErrorMessage] = useState(false)
     const [spinningLoader, setSpinningLoader] = useState(false)
-    
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         
@@ -22,12 +20,12 @@ const UpdatePaymentForm = ({ onCloseForm, costumerDetails }) =>{
         formData.append('staffAccount', staffName)
         try {
           const response = await axiosInstense.put(
-            `api/v1/customerAccounts/payment/update/${costumerDetails._id}`,
+            `api/v1/customerAccounts/update-account-payment/${accountDetails._id}`,
             formData,
             {
               headers: {
                 Authorization: `Bearer ${verifyToken}`,
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'multipart/form-data'
               },
             }
           );
@@ -40,36 +38,15 @@ const UpdatePaymentForm = ({ onCloseForm, costumerDetails }) =>{
           setSpinningLoader(false);
         }
       };
-
-      const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        const parsedValue = name === 'amountGivenByCustomer' ? parseFloat(value) || 0 : value;
-        if (name === 'totalAmount' || name === 'advanceAmount') {
-            const total = parseFloat(updatedCostumerDetails.totalAmount) || 0;
-            const advance = parseFloat(updatedCostumerDetails.advanceAmount) || 0;
-            const calculatedAmount = total - advance;
-    
-            setUpdatedCostumerDetails(prevDetails => ({
-                ...prevDetails,
-                amountGivenByCustomer: calculatedAmount,
-                [name]: isNaN(parsedValue) ? '' : parsedValue,
-            }));
-        } else {
-            setUpdatedCostumerDetails(prevDetails => ({
-                ...prevDetails,
-                [name]: parsedValue,
-            }));
-        }
+      const handlePaymentMethodChange = (e) => {
+        setSelectedPaymentMethod(e.target.value);
     };
-    
 
-    
-    
         return(
         <>
             <div className="bg-[#F2F5FF] h-screen overflow-auto p-3 sm:p-8 rounded-2xl shadow-lg">
             <div className="flex items-center justify-between mb-8">
-                <div className="text-2xl font-semibold">Update Costumer</div>
+                <div className="text-2xl font-semibold">Update Payment</div>
                 <div className="p-3 rounded-md bg-[#EBEBEB] cursor-pointer" onClick={ onCloseForm }>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M18 18L6 6" stroke="#CD2424" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -85,22 +62,26 @@ const UpdatePaymentForm = ({ onCloseForm, costumerDetails }) =>{
                     </div>
                     }
                         <form onSubmit={handleFormSubmit}>
-                            <div class="mb-4">
+                            {accountDetails.profileHiringStatus === "Hired" || accountDetails.profileHiringStatus === "Replaced" ? <div class="mb-4">
                                 <label className="form-label block text-xl">Received Amount</label>
-                                <input defaultValue={updatedCostumerDetails.totalAmount - updatedCostumerDetails.advanceAmount} type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="amountGivenByCustomer" />
-                            </div>
+                                <input defaultValue={accountDetails.totalAmount - accountDetails.receivedAmount} type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="amountGivenByCustomer" />
+                            </div> :<div class="mb-4">
+                                <label className="form-label block text-xl">Return Amount</label>
+                                <input defaultValue={accountDetails.receivedAmount - accountDetails.returnAmount} type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="amountReturnToCustomer" />
+                            </div>}
+                            
                             <div className="md:flex items-center justify-between md:flex-row">
                                 <div class="mb-4">
                                     <label className="form-label block text-xl">Payment Method</label>
-                                    <select value={updatedCostumerDetails.paymentMethod} onChange={handleInputChange} name="paymentMethod" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
+                                    <select value={selectedPaymentMethod} onChange={handlePaymentMethodChange} name="paymentMethod" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
                                         <option value="Cash">Cash</option>
                                         <option value="Bank Transfer">Bank Transfer</option>
                                         <option value="Cheque">Cheque</option>
                                     </select>
                                 </div>
                                 <div class="mb-4">
-                                    <label className="form-label block text-xl">Received By</label>
-                                    <select value={updatedCostumerDetails.receivedBy} onChange={handleInputChange} name="receivedBy" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
+                                    <label className="form-label block text-xl">{accountDetails.profileHiringStatus === "Hired" || accountDetails.profileHiringStatus === "Replaced" ? "Recieved By" : "Sended By" }</label>
+                                    <select name={accountDetails.profileHiringStatus === "Hired" || accountDetails.profileHiringStatus === "Replaced" ? "receivedBy" : "sendedBy" } class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
                                         <option value="Riya">Riya</option>
                                         <option value="Leena">Leena</option>
                                         <option value="Jitan">Jitan</option>
@@ -108,34 +89,32 @@ const UpdatePaymentForm = ({ onCloseForm, costumerDetails }) =>{
                                     </select>
                                 </div>
                             </div>
-                            {updatedCostumerDetails.paymentMethod === "Bank Transfer" && (
+                            {selectedPaymentMethod === "Bank Transfer" && (
                                         <div className="mb-4">
                                             <label className="form-label block text-xl">Select Bank</label>
-                                            <select
-                                                name="selectedBank"
-                                                className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2"
-                                            >
-                                                <option value="" disabled>Select Bank</option>
-                                                <option value="Central Bank">Central Bank</option>
-                                                <option value="Central Bank of Oman">Central Bank of Oman</option>
-                                                <option value="Bank Muscat">Bank Muscat</option>
-                                                <option value="Bank Dhofar">Bank Dhofar</option>
-                                                <option value="National Bank of Oman">National Bank of Oman</option>
-                                                <option value="Sohar International">Sohar International</option>
-                                                <option value="Oman Arab Bank">Oman Arab Bank</option>
-                                                <option value="HSBC Oman">HSBC Oman</option>
-                                                <option value="Ahli Bank">Ahli Bank</option>
-                                                <option value="Bank Nizwa">Bank Nizwa</option>
-                                                <option value="Alizz Islamic Bank">Alizz Islamic Bank</option>
-                                                <option value="First Abu Dhabi Bank Oman">First Abu Dhabi Bank Oman</option>
-                                                <option value="Standard and Charter Bank Oman">Standard and Charter Bank Oman</option>
-                                                <option value="Beirut Oman Bank">Beirut Oman Bank</option>
-                                            </select>
-
-
+                                              <select
+                                                  name="selectedBank"
+                                                  className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2"
+                                              >
+                                                  <option value="" disabled>Select Bank</option>
+                                                  <option value="Central Bank">Central Bank</option>
+                                                  <option value="Central Bank of Oman">Central Bank of Oman</option>
+                                                  <option value="Bank Muscat">Bank Muscat</option>
+                                                  <option value="Bank Dhofar">Bank Dhofar</option>
+                                                  <option value="National Bank of Oman">National Bank of Oman</option>
+                                                  <option value="Sohar International">Sohar International</option>
+                                                  <option value="Oman Arab Bank">Oman Arab Bank</option>
+                                                  <option value="HSBC Oman">HSBC Oman</option>
+                                                  <option value="Ahli Bank">Ahli Bank</option>
+                                                  <option value="Bank Nizwa">Bank Nizwa</option>
+                                                  <option value="Alizz Islamic Bank">Alizz Islamic Bank</option>
+                                                  <option value="First Abu Dhabi Bank Oman">First Abu Dhabi Bank Oman</option>
+                                                  <option value="Standard and Charter Bank Oman">Standard and Charter Bank Oman</option>
+                                                  <option value="Beirut Oman Bank">Beirut Oman Bank</option>
+                                              </select>
                                         </div>
-                                    )}
-                            <label class="block text-xl">Payment Proof</label>                                
+                             )}
+                            <label class="block text-xl">Pay Slip</label>                                
                             <div class="flex items-center mb-4 justify-center w-full">
                                 <label for="hiring-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -164,4 +143,4 @@ const UpdatePaymentForm = ({ onCloseForm, costumerDetails }) =>{
     )
 }
 
-export default UpdatePaymentForm;
+export default UpdateAccountPaymentForm;

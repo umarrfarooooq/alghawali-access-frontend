@@ -18,6 +18,7 @@ const MarkHiredForm = ({ onCloseForm }) =>{
         setSpinningLoader(true);
         const formData = new FormData(e.currentTarget);
         formData.append('hiringBy', staffName)
+        formData.append('staffAccount', staffName)
         try {
           
           const response = await axiosInstense.post(
@@ -144,8 +145,9 @@ const MarkHiredForm = ({ onCloseForm }) =>{
                                 </label>
                             </div>
                             <div>
+                        
                                 <div class="mb-4">
-                                    <button type="submit" className="w-full flex items-center justify-center text-sm font-semibold bg-[#107243] text-white md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
+                                    <button disabled={spinningLoader} type="submit" className="w-full disabled:cursor-not-allowed disabled:bg-[#b9b9b9] flex items-center justify-center text-sm font-semibold bg-[#107243] text-white md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
                                         {spinningLoader && <img className="w-8" src="https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca.gif"/>}
                                         {!spinningLoader && "Mark as Hired"}
                                     </button>

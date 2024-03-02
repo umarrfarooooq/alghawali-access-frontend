@@ -16,6 +16,7 @@ const AccountsCompo = () =>{
     const [accountDetails, setAccountDetails] = useState(null)
     const [costumerAccountDetails, setCostumerAccountDetails] = useState(null)
     const {verifyToken} = VerifyStaffToken();
+    const [users, setUsers] = useState([]);
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [activeTab, setActiveTab] = useState("totalPayment");
     const handleTabClick = (tab) => {
@@ -25,7 +26,7 @@ const AccountsCompo = () =>{
         const fetchAccountHistory = async () => {
           try {
             const response = await axiosInstense.get(
-              "api/v1/maids/hirings/all/",
+              "api/v1/customerAccounts/accountsSummary",
               {
                 headers: {
                   Authorization: `Bearer ${verifyToken}`,
@@ -40,6 +41,7 @@ const AccountsCompo = () =>{
     
         fetchAccountHistory();
       }, []);
+
     useEffect(() => {
         const fetchCostumerAccounts = async () => {
           try {
@@ -68,17 +70,22 @@ const AccountsCompo = () =>{
         setIsFormVisible(prevState => !prevState);
       };
 
-      
-      const users = ['Riya', 'Leena', 'Jitan', 'Ali'];
+      const remainingRecievedDetails = accountDetails && accountDetails.remainingRecievedDetails;
+      useEffect(() => { 
+        if(remainingRecievedDetails) {
+          setUsers(Object.keys(remainingRecievedDetails));
+        }
+      }, [remainingRecievedDetails]);
+
     return(
         <>
         {selectedUser && <Backdrop showBackdrop={true} />}
         {accountDetails && <div className="md:ml-[20rem] relative min-h-screen max-h-full md:px-8 px-4">
                 { selectedUser && <aside className="absolute z-[20] right-0 -mt-8">
-                  <AllPaymentDetailsPopup onCloseForm={() => setSelectedUser(null)} userDetails={accountDetails.receivedByTotal[selectedUser]}/>
+                  <AllPaymentDetailsPopup onCloseForm={() => setSelectedUser(null)} userDetails={accountDetails.remainingRecievedDetails[selectedUser]}/>
                 </aside>
                 }
-        <div>
+                <div>
                     <div className="bg-[#E3E3E3] my-4 rounded-xl md:px-4 px-2 py-2 w-full gap-2 flex items-center justify-between">
                         <div onClick={() => handleTabClick("totalPayment")} className={`${activeTab === "totalPayment" ? "bg-[#FFFBFA] , shadow-md" : ""} transition-all rounded-lg gap-2 md:px-4 px-2 py-4 w-full flex items-center justify-center cursor-pointer`}>
                         <span>
@@ -110,49 +117,53 @@ const AccountsCompo = () =>{
                         </div>
                     </div>
                 </div>
-                
-                {activeTab === "totalPayment" &&  <div className="relative">
-                    <div className="maidsProfiles mt-2">
-                    <div className="flex flex-col gap-y-8">
-                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
-                              <HomeCard cardTxt="Total Amount (Advance)" total={accountDetails.totalAdvanceAmount} count={accountDetails.totalAdvanceAmount}/>
-                              <HomeCard cardTxt="Balance (Remaining)" total={accountDetails.balanceAmount} count={accountDetails.balanceAmount}/>
-                              <HomeCard cardTxt="Return Amount" total={accountDetails.totalReturnAmount} count={accountDetails.totalReturnAmount}/>
-                        </div>
-                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
-                          {users.map((user) => (
-                            <div key={user} onClick={() => handleUserSelection(user)}>
-                              <HomeCard
-                                cursor="true"
-                                detailsPopUp={toggleFormVisibility}
-                                cardTxt={`${user} Received`}
-                                total={`${accountDetails.receivedByTotal[user].total} OMR`}
-                                count={`${accountDetails.receivedByTotal[user].total} OMR`}
-                              />
-                            </div>
-                          ))}
-                        </div>
-                    </div>
-                    </div>
-                </div>}
-               {activeTab === "paymentHistory" && <div className="accountsPaymentHistory">
-                  {accountDetails.allHiring && <div className="historyBoxes bg-[#FFFBFA] p-4 rounded-lg">
-                        {accountDetails.allHiring.map(history => (
-                            <AccountsPaymentHistory key={history._id} accountDetails={history} />
-                        ))}
-                    </div>
-                  }
-                    
+                {accountDetails && costumerAccountDetails ? <div>
+                  {activeTab === "totalPayment" &&  <div className="relative">
+                      <div className="maidsProfiles mt-2">
+                      <div className="flex flex-col gap-y-8">
+                          <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-start border border-solid p-6">
+                                <HomeCard cardTxt="Received Amount" total={accountDetails.receivedAmount} count={accountDetails.receivedAmount}/>
+                                <HomeCard cardTxt="Balance (Remaining)" total={accountDetails.remainingAmount} count={accountDetails.remainingAmount}/>
+                                <HomeCard cardTxt="Return Amount" total={accountDetails.returnAmount} count={accountDetails.returnAmount}/>
+                          </div>
+                          <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-start border border-solid p-6">
+                            {users.map((user) => (
+                              <div key={user} onClick={() => handleUserSelection(user)}>
+                              {accountDetails.remainingRecievedDetails && accountDetails.remainingRecievedDetails[user] && (
+                                <HomeCard
+                                  cursor="true"
+                                  detailsPopUp={toggleFormVisibility}
+                                  cardTxt={`${user} Received`}
+                                  total={`${accountDetails.remainingRecievedDetails[user].total} OMR`}
+                                  count={`${accountDetails.remainingRecievedDetails[user].total} OMR`}
+                                />
+                              )}
+                              </div>
+                            ))}
+                          </div>
+                      </div>
+                      </div>
                   </div>}
-               {activeTab === "Costumers" && <div className="costumersAccounts">
-                  {accountDetails.allHiring && <div className="flex flex-col gap-2 md:gap-4">
-                        {costumerAccountDetails.map(details => (
+                {activeTab === "paymentHistory" && <div className="accountsPaymentHistory">
+                    {accountDetails.allHiring && <div className="historyBoxes bg-[#FFFBFA] p-4 rounded-lg">
+                          {accountDetails.allHiring.map(history => (
+                              <AccountsPaymentHistory key={history._id} accountDetails={history} />
+                          ))}
+                      </div>
+                    }
+                      
+                    </div>}
+                {activeTab === "Costumers" && <div className="costumersAccounts">
+                   <div className="flex flex-col gap-2 md:gap-4">
+                        {costumerAccountDetails
+                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                        .map(details => (
                             <CostumerAccountDetails key={details._id} accountDetails={details} />
                         ))}
                     </div>
-                  }
-                    
                   </div>}
+                </div> : "Loading..."}
+                
         </div>}
         
             

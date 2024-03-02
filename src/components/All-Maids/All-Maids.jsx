@@ -5,6 +5,7 @@ import Backdrop from "../UI/Backdrop";
 import axios from "axios";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 import roles from "../roles/roles";
+import ProfileSkeletonCard from "../Maid-Profile/Maid-Profile-Skeleton";
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -19,6 +20,7 @@ const AllMaids = ({searchTerm}) =>{
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [itemsToLoad, setItemsToLoad] = useState(6);
     const [totalItemsLoaded, setTotalItemsLoaded] = useState(6);
+    const [skeleton, setSkeleton] = useState(false)
     const [activeTab, setActiveTab] = useState("All Maids");
     const handleTabClick = (tab) => {
       setActiveTab(tab);
@@ -40,6 +42,7 @@ const AllMaids = ({searchTerm}) =>{
 
     useEffect(() => {
       const fetchMaidData = async () => {
+        setSkeleton(true)
         try {
           const response = await axiosInstense.get("api/v1/maids/withHired",
             {
@@ -51,10 +54,12 @@ const AllMaids = ({searchTerm}) =>{
             }
           );
           if (response.status === 200) {
+            setSkeleton(false)
             setMaidData(response.data);
             setIsUnAuthorized(false);
-          }         
+          }
         } catch (error) {
+          setSkeleton(false)
           if (error.response && error.response.status === 403) {
             setIsUnAuthorized(true);
           }
@@ -67,6 +72,7 @@ const AllMaids = ({searchTerm}) =>{
 
     useEffect(() => {
       const fetchMaidData = async () => {
+        setSkeleton(true)
         try {
           const response = await axiosInstense.get(`api/v1/maids/byStaff/${staffId}`,
             {
@@ -77,7 +83,9 @@ const AllMaids = ({searchTerm}) =>{
             }
           );
           setMyMaidsData(response.data);
+          setSkeleton(false)
         } catch (error) {
+          setSkeleton(false)
           console.error("Error fetching maid data:", error);
         }
       };
@@ -101,8 +109,6 @@ const AllMaids = ({searchTerm}) =>{
                     <AddMaidForm onCloseForm={toggleFormVisibility} />
                     </aside>
                 )}
-
-
 
                 <div className="maidsCount flex items-center justify-between my-4">
                     <span className="text-xl font-bold hidden sm:inline-block">
@@ -151,22 +157,38 @@ const AllMaids = ({searchTerm}) =>{
                     </div>
                 </div>
                 
-                { activeTab === "All Maids" && <div>
-                { !unAuthorized ? <div>
-                          <div className="w-full border rounded-2xl border-solid p-6">
-                              {currentItems.map((maid) => (
-                              <MaidProfile key={maid._id} maid={maid} />
-                            ))}
-                            <div className="flex items-center justify-center">
-                              {totalItemsLoaded < sortedMaidData.length && (
-                                <button className="border bg-[#107243] border-[#29a167] px-6 py-3 text-sm mt-4 font-semibold cursor-pointer rounded-2xl text-[#fff]" onClick={handleLoadMore}>Load More</button>
-                              )}
-                            </div>
-                            
-                          </div>
-                          
-                </div> : "Not Authorized"}
-                </div>}
+                {activeTab === "All Maids" && (
+                <div>
+                  {!unAuthorized ? (
+                    <div>
+                      <div className="w-full border rounded-2xl border-solid p-6">
+                      {skeleton ? (
+                        Array.from({ length: itemsToLoad }, (_, index) => (
+                          <ProfileSkeletonCard key={index} />
+                        ))
+                      ) : (
+                        currentItems.map((maid) => (
+                          <MaidProfile key={maid._id} maid={maid} />
+                        ))
+                      )}
+                        <div className="flex items-center justify-center">
+                          {totalItemsLoaded < sortedMaidData.length && (
+                            <button
+                              className="border bg-[#107243] border-[#29a167] px-6 py-3 text-sm mt-4 font-semibold cursor-pointer rounded-2xl text-[#fff]"
+                              onClick={handleLoadMore}
+                            >
+                              Load More
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    "Not Authorized"
+                  )}
+                </div>
+)}
+
                 
                       
                       {activeTab === "My Maids" && <div>

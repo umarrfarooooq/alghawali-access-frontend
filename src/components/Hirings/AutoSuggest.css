@@ -1,0 +1,22 @@
+
+.react-autosuggest__suggestion {
+    cursor: pointer;
+    width: 100%;
+    background-color: #E3E3E3;
+    padding-block: .5rem;
+    padding-inline-start: .5rem;
+    border-radius: .125rem;
+    margin-top: .25rem;
+}
+.suggestion-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .suggestion-image {
+    width: 4rem;
+    height: 4rem;
+    margin-right: .5rem;
+    border-radius: 50%;
+  }
+  

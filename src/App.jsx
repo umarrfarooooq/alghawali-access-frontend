@@ -12,14 +12,13 @@ const Login = lazy(() => import('./components/Auth/Login'));
 const Accounts = lazy(() => import('./Pages/Accounts'));
 const Visa = lazy(() => import('./Pages/Visa'));
 const CustomRequirements = lazy(() => import('./Pages/CustomRequirements'));
-
-
+import Loader from './components/UI/Loader';
 function App() {
   const { valid, roles: userRoles } = VerifyStaffToken();
 
   return (
     <Router>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div><Loader /></div>}>
         <Routes>
           <Route path="/" element={valid ? <Home /> : <Navigate to="/login" />} />
           <Route path="/maids" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <OurMaids /> : <Navigate to="/" />} />
@@ -30,6 +29,7 @@ function App() {
           <Route path="/custom-requirements" element={valid ? <CustomRequirements /> : <Navigate to="/" />} />
           <Route path="/login" element={!valid ? <Login /> : <Navigate to="/" />} />
           <Route path="/signup/:invitedToken" element={<InvitedSignup />} />
+          <Route path="/loader" element={<Loader />} />
         </Routes>
       </Suspense>
     </Router>

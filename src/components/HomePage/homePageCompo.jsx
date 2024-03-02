@@ -74,7 +74,7 @@ const HomePageCompo = () =>{
 
     return(
         <>
-        {accountDetails && <div className="md:ml-[20rem] md:px-8 px-4 min-h-screen max-h-full">
+        {accountDetails && maidsInfo && <div className="md:ml-[20rem] md:px-8 px-4 min-h-screen max-h-full">
                 <div className="relative">
                     <div className="maidsProfiles mt-2">
                     <div className="flex flex-col gap-y-8">
@@ -83,13 +83,6 @@ const HomePageCompo = () =>{
                             <HomeCard cardTxt="Hired Maids" count={maidsInfo.hiredMaids} total={maidsInfo.hiredMaids}/>
                             <HomeCard svg={svg3} cardTxt="Total Number Of Non-Hire Maids" count={maidsInfo.remainingMaids} total={maidsInfo.remainingMaids}/>
                         </div>
-                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
-                            <HomeCard cardTxt="Total Amount (Advance)" total={accountDetails.totalAdvanceAmount} count={accountDetails.totalAdvanceAmount}/>
-                            <HomeCard cardTxt="Balance (Remaining)" total={accountDetails.balanceAmount} count={accountDetails.balanceAmount}/>
-                            <HomeCard cardTxt="Return Amount" total={accountDetails.totalReturnAmount} count={accountDetails.totalReturnAmount}/>
-                            <HomeCard />
-                        </div>
-                        
                     </div>
                     </div>
                 </div>

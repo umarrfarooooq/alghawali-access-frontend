@@ -5,7 +5,7 @@ import ListAgainForm from "../Hirings/List-Again-form";
 import MaidHistoryCard from "./Maid-History";
 import MarkHiredForm from "../Hirings/Mark-as-hired-form";
 import Backdrop from "../UI/Backdrop";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import roles from '../roles/roles';
 import { VerifyStaffToken } from "../Auth/VerifyToken";
@@ -31,6 +31,7 @@ const MaidDetailComponent = () =>{
     const [isUpdatePaymentFormVisible, setIsUpdatePaymentFormVisible] = useState(false);
     const [activeTab, setActiveTab] = useState("profileInfo");
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const navigate = useNavigate();
     const handleTabClick = (tab) => {
       setActiveTab(tab);
     };
@@ -203,8 +204,15 @@ const MaidDetailComponent = () =>{
                 </div>}
                 
                 {activeTab === "profileInfo" && <div>
-                    <div className="maidsCount flex items-center justify-between my-4">
-                        <span className="text-xl font-bold hidden md:inline-block">
+                    <div className="maidsCount flex md:items-center md:justify-between flex-col md:flex-row my-4">
+                    
+                        <span className="text-xl font-bold md:flex items-center justify-start gap-3">
+                            <div onClick={() => navigate(-1)} className='bg-[#fff] w-fit cursor-pointer p-3 rounded-lg'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 5L5 12L12 19" stroke="#262F32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M19 12L5 12" stroke="#262F32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
                             {maidDetails.name}
                         </span>
                         <div>
@@ -297,7 +305,7 @@ const MaidDetailComponent = () =>{
                                                 </div>
                                                 <div className="Languages">
                                                     <div className="text-xs">Languages</div>
-                                                    <div className="text-sm font-semibold">{maidDetails.languages}</div>
+                                                    <div className="text-sm font-semibold">{maidDetails.languages.join(', ')}</div>
                                                 </div>
                                                 <div className="Salary">
                                                     <div className="text-xs">Salary</div>

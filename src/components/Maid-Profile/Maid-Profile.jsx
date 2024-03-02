@@ -60,7 +60,9 @@ const MaidProfile = ({maid}) =>{
                                 </div>
                                 <div className="Languages">
                                     <div className="text-xs">Languages</div>
-                                    <div className="text-sm font-semibold">{maid.languages}</div>
+                                    <div className="text-sm font-semibold">
+                                        {maid.languages.join(', ')}
+                                    </div>
                                 </div>
                                 <div className="Salary">
                                     <div className="text-xs">Salary</div>
