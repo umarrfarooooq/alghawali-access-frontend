@@ -5,6 +5,8 @@ import axios from "axios";
 import AddVisaForm from "./Add-Visa-Form";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 import roles from "../roles/roles";
+import VisaSkeletonCard from "./Visa-Profile-Skeleton";
+import Grow from '@mui/material/Grow';
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -74,9 +76,7 @@ const calculateRemainingDays = (endDate) => {
       }
       const today = new Date();
       const visaEnd = new Date(visa.visaEndTime);
-      const lastExtension = visa.extensionHistory && visa.extensionHistory.length > 0 && visa.extensionHistory[visa.extensionHistory.length - 1];
-      const lastExtensionEnd = lastExtension ? new Date(lastExtension.newVisaEndDate) : visaEnd;
-      return today > visaEnd || (lastExtension && today > lastExtensionEnd);
+      return today > visaEnd;
     })
     .length;
     return(
@@ -85,9 +85,11 @@ const calculateRemainingDays = (endDate) => {
             <div className="md:ml-[20rem] md:px-8 px-4">
             <div className="relative">
                 {isFormVisible && (
+                  <Grow in={isFormVisible}>
                     <aside className="absolute z-[20] right-0 -mt-8 w-full sm:w-auto">
-                    <AddVisaForm onCloseForm={toggleFormVisibility} />
+                      <AddVisaForm onCloseForm={toggleFormVisibility} />
                     </aside>
+                  </Grow>
                 )}
                 <div className="maidsCount flex items-center justify-between my-4">
                     <span className="text-xl font-bold hidden sm:inline-block">
@@ -145,7 +147,7 @@ const calculateRemainingDays = (endDate) => {
                     </div>
                 </div>
                 {activeTab === "AllProfiles" && 
-                <div className="w-full border rounded-2xl border-solid p-6">
+                <div className="w-full border rounded-2xl border-solid p-6 2xl:grid grid-cols-2 gap-2">
                 
                 {
                   Array.isArray(visaData) && visaData.length > 0 ? (
@@ -154,27 +156,31 @@ const calculateRemainingDays = (endDate) => {
                       ...visa,
                       remainingDays: calculateRemainingDays(visa.visaEndTime),
                     }))
-                    .filter(visa => !visa.remainingDays.includes('Days Over Stay'))
+                    .filter(visa => !visa.remainingDays.includes('Days Over Stay')) 
+                    .filter(visa => !visa.hiringStatus)
                     .sort((a, b) => {
-                      if (a.hiringStatus && !b.hiringStatus) {
-                        return 1;
-                      } else if (!a.hiringStatus && b.hiringStatus) {
+                      if (a.remainingDays === 'Last Day' && b.remainingDays !== 'Last Day') {
                         return -1;
+                      } else if (a.remainingDays !== 'Last Day' && b.remainingDays === 'Last Day') {
+                        return 1;
                       }
-                      return 0;
+                      const remainingDaysA = parseInt(a.remainingDays);
+                      const remainingDaysB = parseInt(b.remainingDays);
+                      return remainingDaysA - remainingDaysB;
                     })
                     .map(visa => (
                       <VisaProfile key={visa._id} visa={visa} />
                     ))
                   ) : (
-                    <p>No visa data available</p>
+                    Array.from({ length: 6 }, (_, index) => (
+                          <VisaSkeletonCard key={index} />
+                        ))
                   )
                 }
 
-
                 </div>}
                 {activeTab === "HiredProfiles" && (
-                <div className="w-full border rounded-2xl border-solid p-6">
+                <div className="w-full border rounded-2xl border-solid p-6 2xl:grid grid-cols-2 gap-2">
                 {Array.isArray(visaData) && visaData.length > 0 ? (
                   visaData
                     .filter(visa => visa.hiringStatus)
@@ -205,7 +211,7 @@ const calculateRemainingDays = (endDate) => {
                 </div>
                 )}
                 {activeTab === "Over Stay" && (
-                  <div className="w-full border rounded-2xl border-solid p-6">
+                  <div className="w-full border rounded-2xl border-solid p-6 2xl:grid grid-cols-2 gap-2">
                     {
                       Array.isArray(visaData) && visaData.length > 0 ? (
                         visaData
@@ -215,9 +221,7 @@ const calculateRemainingDays = (endDate) => {
                           }
                           const today = new Date();
                           const visaEnd = new Date(visa.visaEndTime);
-                          const lastExtension = visa.extensionHistory && visa.extensionHistory.length > 0 && visa.extensionHistory[visa.extensionHistory.length - 1];
-                          const lastExtensionEnd = lastExtension ? new Date(lastExtension.newVisaEndDate) : visaEnd;
-                          return today > visaEnd || (lastExtension && today > lastExtensionEnd);
+                          return today > visaEnd;
                         })
                         .sort((a, b) => {
                           const today = new Date();

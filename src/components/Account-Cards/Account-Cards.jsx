@@ -6,6 +6,7 @@ import AccountsPaymentHistory from "./Accounts-Payment-History";
 import AllPaymentDetailsPopup from "./All-Payments-Details";
 import Backdrop from "../UI/Backdrop";
 import CostumerAccountDetails from "./Costumers-Accounts";
+import Skeleton from '@mui/material/Skeleton';
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -80,8 +81,8 @@ const AccountsCompo = () =>{
     return(
         <>
         {selectedUser && <Backdrop showBackdrop={true} />}
-        {accountDetails && <div className="md:ml-[20rem] relative min-h-screen max-h-full md:px-8 px-4">
-                { selectedUser && <aside className="absolute z-[20] right-0 -mt-8">
+        <div className="md:ml-[20rem] relative min-h-screen max-h-full md:px-8 px-4">
+                { selectedUser && accountDetails && <aside className="absolute z-[20] right-0 -mt-8">
                   <AllPaymentDetailsPopup onCloseForm={() => setSelectedUser(null)} userDetails={accountDetails.remainingRecievedDetails[selectedUser]}/>
                 </aside>
                 }
@@ -117,30 +118,42 @@ const AccountsCompo = () =>{
                         </div>
                     </div>
                 </div>
-                {accountDetails && costumerAccountDetails ? <div>
+                <div>
                   {activeTab === "totalPayment" &&  <div className="relative">
                       <div className="maidsProfiles mt-2">
                       <div className="flex flex-col gap-y-8">
-                          <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-start border border-solid p-6">
+                      {accountDetails && costumerAccountDetails ? <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-start border border-solid p-6">
                                 <HomeCard cardTxt="Received Amount" total={accountDetails.receivedAmount} count={accountDetails.receivedAmount}/>
                                 <HomeCard cardTxt="Balance (Remaining)" total={accountDetails.remainingAmount} count={accountDetails.remainingAmount}/>
                                 <HomeCard cardTxt="Return Amount" total={accountDetails.returnAmount} count={accountDetails.returnAmount}/>
                           </div>
-                          <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-start border border-solid p-6">
-                            {users.map((user) => (
-                              <div key={user} onClick={() => handleUserSelection(user)}>
-                              {accountDetails.remainingRecievedDetails && accountDetails.remainingRecievedDetails[user] && (
-                                <HomeCard
-                                  cursor="true"
-                                  detailsPopUp={toggleFormVisibility}
-                                  cardTxt={`${user} Received`}
-                                  total={`${accountDetails.remainingRecievedDetails[user].total} OMR`}
-                                  count={`${accountDetails.remainingRecievedDetails[user].total} OMR`}
-                                />
+                           : <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-start border border-solid p-6">
+                          <Skeleton variant="rounded" height={184} className="sm:w-[15rem] md:w-[19rem] xl:w-[22rem] w-full" />
+                          <Skeleton variant="rounded" height={184} className="sm:w-[15rem] md:w-[19rem] xl:w-[22rem] w-full" />
+                          <Skeleton variant="rounded" height={184} className="sm:w-[15rem] md:w-[19rem] xl:w-[22rem] w-full" />
+                        </div>}
+                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-start border border-solid p-6">
+                          {users.map((user) => (
+                            <span key={user}>
+                              {accountDetails && costumerAccountDetails ? (
+                                <div onClick={() => handleUserSelection(user)}>
+                                  {accountDetails.remainingRecievedDetails && accountDetails.remainingRecievedDetails[user] && (
+                                    <HomeCard
+                                      cursor="true"
+                                      detailsPopUp={toggleFormVisibility}
+                                      cardTxt={`${user} Received`}
+                                      total={`${accountDetails.remainingRecievedDetails[user].total} OMR`}
+                                      count={`${accountDetails.remainingRecievedDetails[user].total} OMR`}
+                                    />
+                                  )}
+                                </div>
+                              ) : (
+                                <Skeleton variant="rounded" height={184} className="sm:w-[15rem] md:w-[19rem] xl:w-[22rem] w-full" />
                               )}
-                              </div>
-                            ))}
-                          </div>
+                            </span>
+                          ))}
+                        </div>
+
                       </div>
                       </div>
                   </div>}
@@ -162,9 +175,9 @@ const AccountsCompo = () =>{
                         ))}
                     </div>
                   </div>}
-                </div> : "Loading..."}
+                </div>
                 
-        </div>}
+        </div>
         
             
         </>

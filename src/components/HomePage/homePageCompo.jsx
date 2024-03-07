@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import HomeCard from "./HomeCard";
 import axios from "axios";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
+import Skeleton from '@mui/material/Skeleton';
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -74,20 +75,24 @@ const HomePageCompo = () =>{
 
     return(
         <>
-        {accountDetails && maidsInfo && <div className="md:ml-[20rem] md:px-8 px-4 min-h-screen max-h-full">
+        <div className="md:ml-[20rem] md:px-8 px-4 min-h-screen max-h-full">
                 <div className="relative">
                     <div className="maidsProfiles mt-2">
                     <div className="flex flex-col gap-y-8">
-                        <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-between border border-solid p-6">
+                    {accountDetails && maidsInfo ? <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-start border border-solid p-6">
                             <HomeCard cardTxt="Total Maids" count={maidsInfo.totalMaids} total={maidsInfo.totalMaids}/>
                             <HomeCard cardTxt="Hired Maids" count={maidsInfo.hiredMaids} total={maidsInfo.hiredMaids}/>
                             <HomeCard svg={svg3} cardTxt="Total Number Of Non-Hire Maids" count={maidsInfo.remainingMaids} total={maidsInfo.remainingMaids}/>
-                        </div>
+                        </div> : <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-center justify-start border border-solid p-6">
+                          <Skeleton variant="rounded" height={184} className="sm:w-[15rem] md:w-[19rem] xl:w-[22rem] w-full" />
+                          <Skeleton variant="rounded" height={184} className="sm:w-[15rem] md:w-[19rem] xl:w-[22rem] w-full" />
+                          <Skeleton variant="rounded" height={184} className="sm:w-[15rem] md:w-[19rem] xl:w-[22rem] w-full" />
+                        </div>}
+                        
                     </div>
                     </div>
                 </div>
-            
-        </div>}
+        </div>
             
         </>
     )

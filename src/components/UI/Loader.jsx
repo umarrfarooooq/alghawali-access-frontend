@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logo from "../../assets/logo.svg"
 
 const AnimatedDiv = () => {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -27,7 +26,6 @@ const Loader = () =>{
         <>
             <div className="flex items-center justify-center h-screen">
             <div>
-                <img src={logo} alt="Company Logo"/>
                 <div className="flex items-center justify-center gap-2 mt-4">
                     <AnimatedDiv />
                     <div className="w-6 h-6 bg-[#253061] rounded-full"></div>

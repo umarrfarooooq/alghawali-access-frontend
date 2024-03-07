@@ -91,7 +91,7 @@ const AllStaff = () =>{
                 </div>
                 <div className="staffProfiles mt-2 min-h-screen max-h-full">
                 <div>
-                    <div className="w-full border border-solid p-6 rounded-3xl">
+                    <div className="w-full border border-solid p-6 rounded-3xl 2xl:grid grid-cols-2 gap-2">
                     {filteredStaffData.map((staff) => (
                         <StaffProfile key={staff._id} staff={staff} />
                     ))}
