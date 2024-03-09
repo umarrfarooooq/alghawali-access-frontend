@@ -49,7 +49,6 @@ const AddVisaForm = ({ onCloseForm }) =>{
           },
         });
   
-        console.log("Response from API:", response.data);
         setSpinningLoader(false)
         onCloseForm()
       } catch (error) {

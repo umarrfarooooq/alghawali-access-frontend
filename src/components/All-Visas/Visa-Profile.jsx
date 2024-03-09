@@ -38,11 +38,13 @@ const VisaProfile = ({visa}) =>{
         const start = new Date(startDate);
         const end = new Date(endDate);
     
-        const diffInMs = Math.abs(end - start);
+        start.setUTCHours(12, 0, 0, 0);
+        end.setUTCHours(12, 0, 0, 0);
     
-        const days = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-
-        return `${days} days`;
+        const diffInMs = Math.abs(end - start);
+        const days = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+    
+        return `${days + 1} days`;
     };
     const calculateRemainingDays = (endDate) => {
         const end = new Date(endDate);
@@ -55,7 +57,7 @@ const VisaProfile = ({visa}) =>{
             const lateDays = Math.abs(days);
             return `${lateDays} Days Over Stay`;
         } else if (days === 0) {
-            return 'Last Day';
+            return '0 Day';
         }
     
         return `${days} Days`;
@@ -96,19 +98,20 @@ const VisaProfile = ({visa}) =>{
 
     const remainingDays = calculateRemainingDays(visa.visaEndTime);
     let textColor = '#000';
-    if (remainingDays.includes('Days Over Stay')) {
+
+if (remainingDays.includes('Days Over Stay')) {
+    textColor = '#CD2424'; 
+} else {
+    const days = parseInt(remainingDays);
+
+    if (days === 0) {
         textColor = '#CD2424'; 
-      }
-      if (remainingDays.includes('Last Day')) {
-        textColor = '#CD2424'; 
-      } else {
-        const days = parseInt(remainingDays);
-        if (days < 5) {
-          textColor = '#CD2424'; 
-        } else if (days < 10 && days > 4 && !remainingDays.includes('Days Over Stay')) {
-          textColor = '#FFA500';
-        }
-      }
+    } else if (days < 6) {
+        textColor = '#FFA500'; 
+    } else {
+        textColor = '#0C8B3F';
+    }
+}
 
     const extensionHistory = visa.extensionHistory;
     return(
