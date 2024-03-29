@@ -18,6 +18,27 @@ const ListAgainForm = ({ onCloseForm }) =>{
     const [activeTab, setActiveTab] = useState("Return");
     const [isAmountReceived, setIsAmountReceived] = useState(false);
     const [newMaidID, setNewMaidID] = useState(null);
+    const [staffNames, setStaffNames] = useState([]);
+
+    useEffect(() => {
+        const fetchAccountNames = async () => {
+          try {
+            const response = await axiosInstense.get(
+              "api/v1/staffAccounts/all-accounts",
+              {
+                headers: {
+                  Authorization: `Bearer ${verifyToken}`,
+                },
+              }
+            );
+            setStaffNames(response.data.map(staff => staff.staffName));
+          } catch (error) {
+            console.error("Error fetching staff names:", error);
+          }
+        };
+    
+        fetchAccountNames();
+      }, [verifyToken]);
 
     const handleMaidIdSelected = (selectedMaidID) => {
         setNewMaidID(selectedMaidID);
@@ -134,10 +155,9 @@ const ListAgainForm = ({ onCloseForm }) =>{
                                 <div class="mb-4">
                                     <label className="form-label block text-xl">Sended By</label>
                                     <select name="sendedBy" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                                        <option value="Riya">Riya</option>
-                                        <option value="Leena">Leena</option>
-                                        <option value="Jitan">Jitan</option>
-                                        <option value="Ali">Ali</option>
+                                    {staffNames.map((name, index) => (
+                                        <option key={index} value={name}>{name}</option>
+                                    ))}
                                     </select>
                                 </div>
                             </div>
@@ -219,18 +239,16 @@ const ListAgainForm = ({ onCloseForm }) =>{
                                 {isAmountReceived ? <div class="mb-4">
                                     <label className="form-label block text-xl">Sended By</label>
                                     <select name="sendedBy" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                                        <option value="Riya">Riya</option>
-                                        <option value="Leena">Leena</option>
-                                        <option value="Jitan">Jitan</option>
-                                        <option value="Ali">Ali</option>
+                                        {staffNames.map((name, index) => (
+                                        <option key={index} value={name}>{name}</option>
+                                    ))}
                                     </select>
                                 </div>: <div class="mb-4">
                                     <label className="form-label block text-xl">Received By</label>
                                     <select name="receivedBy" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                                        <option value="Riya">Riya</option>
-                                        <option value="Leena">Leena</option>
-                                        <option value="Jitan">Jitan</option>
-                                        <option value="Ali">Ali</option>
+                                    {staffNames.map((name, index) => (
+                                        <option key={index} value={name}>{name}</option>
+                                    ))}
                                     </select>
                                 </div>}
 

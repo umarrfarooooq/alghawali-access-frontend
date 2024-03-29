@@ -10,6 +10,8 @@ const MaidDetails = lazy(() => import('./Pages/MaidDetails'));
 const Home = lazy(() => import('./Pages/Home'));
 const Login = lazy(() => import('./components/Auth/Login'));
 const Accounts = lazy(() => import('./Pages/Accounts'));
+const StaffAccount = lazy(() => import('./Pages/Staff-Account-Page'));
+const StaffAccountHistory = lazy(() => import('./Pages/Staff-Account-Page-History'));
 const Visa = lazy(() => import('./Pages/Visa'));
 const CustomRequirements = lazy(() => import('./Pages/CustomRequirements'));
 import Loader from './components/UI/Loader';
@@ -22,7 +24,9 @@ function App() {
         <Routes>
           <Route path="/" element={valid ? <Home /> : <Navigate to="/login" />} />
           <Route path="/maids" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <OurMaids /> : <Navigate to="/" />} />
-          <Route path="/accounts" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <Accounts /> : <Navigate to="/" />} />
+          <Route path="/accounts" element={valid && userRoles.includes(roles.canAccessOnAccounts) ? <Accounts /> : <Navigate to="/" />} />
+          <Route path="/my-account" element={valid && userRoles.includes(roles.canAccessOnAccounts) ? <StaffAccount /> : <Navigate to="/" />} />
+          <Route path="/my-account-history/:staffId" element={valid && userRoles.includes(roles.canAccessOnAccounts) ? <StaffAccountHistory /> : <Navigate to="/" />} />
           <Route path="/staff" element={valid && userRoles.includes(roles.ShowAccessOnAddStaff) ? <Staff /> : <Navigate to="/" />} />
           <Route path="/details/:maidID" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <MaidDetails /> : <Navigate to="/" />} />
           <Route path="/visa" element={valid ? <Visa /> : <Navigate to="/" />} />

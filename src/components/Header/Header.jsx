@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/avatar.png"
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 import logo from "../sidebar/logo.svg"
-
+import { Grow } from "@mui/material";
+import roles from "../roles/roles";
 const Header = ({ onClick, className, headerTxt }) =>{
 
-    const {staffName} = VerifyStaffToken()
+    const { staffName , roles : userRoles} = VerifyStaffToken()
+    const [myAccountList, setMyAccountList] = useState(false)
+
+    const handleAccountListToggle = () => {
+        setMyAccountList(prevState => !prevState)
+    }
 
     return(
         <>
@@ -34,8 +40,20 @@ const Header = ({ onClick, className, headerTxt }) =>{
                         <span className="text-3xl">{headerTxt ? headerTxt : `Welcome Back, ${staffName}`}</span>
                     </div>
                     <div className="rightSideDesktop">
-                    <div className="profile">
-                        <img className="w-12 h-12 rounded-full object-cover object-top" src={Avatar}/>
+                    <div className="profile relative">
+                        <img onClick={handleAccountListToggle} className="w-12 h-12 cursor-pointer rounded-full object-cover object-top" src={Avatar}/>
+                        {userRoles.includes(roles.canAccessOnAccounts) && myAccountList && <Grow in={myAccountList}>
+                            <div className="absolute z-10 right-0">
+                            <div className="bg-white shadow-lg rounded-md py-1 w-[16rem]">
+                                <ul>
+                                <Link to="/my-account">
+                                    <li className="px-2 py-2 hover:bg-gray-200 cursor-pointer transition-all">My Account</li>
+                                </Link>
+                                </ul>
+                            </div>
+                        </div>
+                        </Grow> }
+                        
                     </div>
                     </div>
                 </div>

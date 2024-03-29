@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 
 const axiosInstense = axios.create({
@@ -11,7 +11,28 @@ const UpdateAccountPaymentForm = ({ onCloseForm, accountDetails }) =>{
     const [errorMessage, setErrorMessage] = useState(false)
     const [spinningLoader, setSpinningLoader] = useState(false)
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+    const [staffNames, setStaffNames] = useState([]);
 
+    useEffect(() => {
+        const fetchAccountNames = async () => {
+          try {
+            const response = await axiosInstense.get(
+              "api/v1/staffAccounts/all-accounts",
+              {
+                headers: {
+                  Authorization: `Bearer ${verifyToken}`,
+                },
+              }
+            );
+            setStaffNames(response.data.map(staff => staff.staffName));
+          } catch (error) {
+            console.error("Error fetching staff names:", error);
+          }
+        };
+    
+        fetchAccountNames();
+      }, [verifyToken]);
+      
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         
@@ -62,7 +83,7 @@ const UpdateAccountPaymentForm = ({ onCloseForm, accountDetails }) =>{
                     </div>
                     }
                         <form onSubmit={handleFormSubmit}>
-                            {accountDetails.profileHiringStatus === "Hired" || accountDetails.profileHiringStatus === "Replaced" ? <div class="mb-4">
+                            {accountDetails.profileHiringStatus === "Hired" || accountDetails.profileHiringStatus === "Replaced" && !accountDetails.receivedAmount > accountDetails.totalAmount  ? <div class="mb-4">
                                 <label className="form-label block text-xl">Received Amount</label>
                                 <input defaultValue={accountDetails.totalAmount - accountDetails.receivedAmount} type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="amountGivenByCustomer" />
                             </div> :<div class="mb-4">
@@ -80,12 +101,11 @@ const UpdateAccountPaymentForm = ({ onCloseForm, accountDetails }) =>{
                                     </select>
                                 </div>
                                 <div class="mb-4">
-                                    <label className="form-label block text-xl">{accountDetails.profileHiringStatus === "Hired" || accountDetails.profileHiringStatus === "Replaced" ? "Recieved By" : "Sended By" }</label>
-                                    <select name={accountDetails.profileHiringStatus === "Hired" || accountDetails.profileHiringStatus === "Replaced" ? "receivedBy" : "sendedBy" } class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                                        <option value="Riya">Riya</option>
-                                        <option value="Leena">Leena</option>
-                                        <option value="Jitan">Jitan</option>
-                                        <option value="Ali">Ali</option>
+                                    <label className="form-label block text-xl">{accountDetails.profileHiringStatus === "Hired" || accountDetails.profileHiringStatus === "Replaced" && !accountDetails.receivedAmount > accountDetails.totalAmount  ? "Recieved By" : "Sended By" }</label>
+                                    <select name={accountDetails.profileHiringStatus === "Hired" || accountDetails.profileHiringStatus === "Replaced" && !accountDetails.receivedAmount > accountDetails.totalAmount  ? "receivedBy" : "sendedBy" } class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
+                                    {staffNames.map((name, index) => (
+                                        <option key={index} value={name}>{name}</option>
+                                    ))}
                                     </select>
                                 </div>
                             </div>

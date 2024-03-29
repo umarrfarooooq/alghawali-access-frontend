@@ -13,7 +13,27 @@ const UpdateCostumerForm = ({ onCloseForm, costumerDetails }) =>{
     const {maidID} = useParams();
     const [errorMessage, setErrorMessage] = useState(false)
     const [spinningLoader, setSpinningLoader] = useState(false)
+    const [staffNames, setStaffNames] = useState([]);
+
+    useEffect(() => {
+        const fetchAccountNames = async () => {
+          try {
+            const response = await axiosInstense.get(
+              "api/v1/staffAccounts/all-accounts",
+              {
+                headers: {
+                  Authorization: `Bearer ${verifyToken}`,
+                },
+              }
+            );
+            setStaffNames(response.data.map(staff => staff.staffName));
+          } catch (error) {
+            console.error("Error fetching staff names:", error);
+          }
+        };
     
+        fetchAccountNames();
+      }, [verifyToken]);
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setSpinningLoader(true);
@@ -71,15 +91,6 @@ const UpdateCostumerForm = ({ onCloseForm, costumerDetails }) =>{
                                 <label className="form-label block text-xl">Customer Name</label>
                                 <input  value={updatedCostumerDetails.fullName} onChange={(e) => handleInputChange(e.target.value, 'fullName')} type="text" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="fullName" />
                             </div>
-                            {/* <div className="mb-4">
-                                <label className="form-label block text-xl">Total Amount</label>
-                                <input onChange={(e) => handleInputChange(e.target.value, 'totalAmount')} value={updatedCostumerDetails.totalAmount} type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="totalAmount" />
-                            </div>
-
-                            <div class="mb-4">
-                                <label className="form-label block text-xl">Advance Amount</label>
-                                <input onChange={(e) => handleInputChange(e.target.value, 'advanceAmount')} value={updatedCostumerDetails.advanceAmount} type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="advanceAmount" />
-                            </div> */}
                             <div className="md:flex items-center justify-between md:flex-row">
                                 <div class="mb-4">
                                     <label className="form-label block text-xl">Payment Method</label>
@@ -92,10 +103,9 @@ const UpdateCostumerForm = ({ onCloseForm, costumerDetails }) =>{
                                 <div class="mb-4">
                                     <label className="form-label block text-xl">Received By</label>
                                     <select value={updatedCostumerDetails.receivedBy} onChange={(e) => handleInputChange(e.target.value, 'receivedBy')} name="receivedBy" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                                        <option value="Riya">Riya</option>
-                                        <option value="Leena">Leena</option>
-                                        <option value="Jitan">Jitan</option>
-                                        <option value="Ali">Ali</option>
+                                    {staffNames.map((name, index) => (
+                                        <option key={index} value={name}>{name}</option>
+                                    ))}
                                     </select>
                                 </div>
                             </div>

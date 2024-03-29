@@ -173,8 +173,9 @@ if (remainingDays.includes('Days Over Stay')) {
                         {visa.maidImage ? <img
                             className="w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top"
                             src={`${import.meta.env.VITE_API_URL}${visa.maidImage}`}
-                            /> : <div className="w-full sm:w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top bg-slate-300"></div>}
-                            
+                            /> : ""
+                            }
+                            {/* <div className="w-full sm:w-[18rem] h-[18rem] lg:w-[8rem] lg:h-[8rem] rounded-md object-cover object-top bg-slate-300"></div> */}
                         </div>
                     </div>
                     <div className="profileRightSide">

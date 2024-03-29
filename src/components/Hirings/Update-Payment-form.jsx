@@ -13,7 +13,28 @@ const UpdatePaymentForm = ({ onCloseForm, costumerDetails }) =>{
     const {maidID} = useParams();
     const [errorMessage, setErrorMessage] = useState(false)
     const [spinningLoader, setSpinningLoader] = useState(false)
+    const [staffNames, setStaffNames] = useState([]);
+
+    useEffect(() => {
+        const fetchAccountNames = async () => {
+          try {
+            const response = await axiosInstense.get(
+              "api/v1/staffAccounts/all-accounts",
+              {
+                headers: {
+                  Authorization: `Bearer ${verifyToken}`,
+                },
+              }
+            );
+            setStaffNames(response.data.map(staff => staff.staffName));
+          } catch (error) {
+            console.error("Error fetching staff names:", error);
+          }
+        };
     
+        fetchAccountNames();
+      }, [verifyToken]);
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         
@@ -101,10 +122,9 @@ const UpdatePaymentForm = ({ onCloseForm, costumerDetails }) =>{
                                 <div class="mb-4">
                                     <label className="form-label block text-xl">Received By</label>
                                     <select value={updatedCostumerDetails.receivedBy} onChange={handleInputChange} name="receivedBy" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                                        <option value="Riya">Riya</option>
-                                        <option value="Leena">Leena</option>
-                                        <option value="Jitan">Jitan</option>
-                                        <option value="Ali">Ali</option>
+                                        {staffNames.map((name, index) => (
+                                        <option key={index} value={name}>{name}</option>
+                                    ))}
                                     </select>
                                 </div>
                             </div>

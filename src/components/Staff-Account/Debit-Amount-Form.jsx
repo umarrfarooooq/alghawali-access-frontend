@@ -1,52 +1,24 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
   })
-
-const MarkHiredForm = ({ onCloseForm }) =>{
+const DebitAmountForm = ({ onCloseForm }) =>{
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
-    const {verifyToken, staffName, staffId} = VerifyStaffToken();
-    const {maidID} = useParams();
+    const {verifyToken, staffId} = VerifyStaffToken();
     const [errorMessage, setErrorMessage] = useState(false)
     const [spinningLoader, setSpinningLoader] = useState(false)
-    const [staffNames, setStaffNames] = useState([]);
-
-    useEffect(() => {
-        const fetchAccountNames = async () => {
-          try {
-            const response = await axiosInstense.get(
-              "api/v1/staffAccounts/all-accounts",
-              {
-                headers: {
-                  Authorization: `Bearer ${verifyToken}`,
-                },
-              }
-            );
-            setStaffNames(response.data.map(staff => staff.staffName));
-          } catch (error) {
-            console.error("Error fetching staff names:", error);
-          }
-        };
-    
-        fetchAccountNames();
-      }, [verifyToken]);
-
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setSpinningLoader(true);
         const formData = new FormData(e.currentTarget);
-        formData.append('hiringBy', staffName)
-        formData.append('staffAccount', staffName)
         formData.append('staffId', staffId)
         try {
-          
           const response = await axiosInstense.post(
-            `api/v1/customerAccounts/hiring/${maidID}`,
+            `api/v1/staffAccounts/debit-amount`,
             formData,
             {
               headers: {
@@ -55,15 +27,29 @@ const MarkHiredForm = ({ onCloseForm }) =>{
               },
             }
           );
-    
-          setSpinningLoader(false);
-          onCloseForm();
+          if(response.status === 200){
+            setSpinningLoader(false);
+            onCloseForm();
+        }
         } catch (error) {
           console.error('Error submitting form:', error);
-          setErrorMessage('An error occurred. Please try again.');
-          setSpinningLoader(false);
-        }
-      };
+        if (error.response) {
+            const { status, data } = error.response;
+            if (status === 400) {
+                setErrorMessage(data.error);
+            }else if(status === 404){
+                setErrorMessage(data.error);
+            } else {
+                setErrorMessage('An error occurred. Please try again.');
+            }
+            } else if (error.request) {
+                setErrorMessage('No response received from the server. Please try again.');
+            } else {
+                setErrorMessage('An error occurred. Please try again.');
+            }
+            setSpinningLoader(false);
+            }
+        };
       
     const handlePaymentMethodChange = (e) => {
         setSelectedPaymentMethod(e.target.value);
@@ -71,9 +57,9 @@ const MarkHiredForm = ({ onCloseForm }) =>{
 
         return(
         <>
-        <div className="bg-[#F2F5FF] h-screen overflow-auto p-3 sm:p-8 rounded-2xl shadow-lg">
+        <div className="bg-[#F2F5FF] max-h-screen min-h-full overflow-auto p-3 sm:p-8 rounded-2xl shadow-lg">
         <div className="flex items-center justify-between mb-8">
-            <div className="text-2xl font-semibold">Hiring Maid</div>
+            <div className="text-2xl font-semibold">Transfer Amount</div>
             <div className="p-3 rounded-md bg-[#EBEBEB] cursor-pointer" onClick={ onCloseForm }>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M18 18L6 6" stroke="#CD2424" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -90,35 +76,20 @@ const MarkHiredForm = ({ onCloseForm }) =>{
                 }
                         <form onSubmit={handleFormSubmit}>
                             <div className="mb-4">
-                                <label className="form-label block text-xl">Customer Name</label>
-                                <input type="text" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="fullName" />
+                                <label className="form-label block text-xl">Amount</label>
+                                <input type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="debitAmount" />
                             </div>
                             <div className="mb-4">
-                                <label className="form-label block text-xl">Total Amount</label>
-                                <input type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="totalAmount" />
+                                <label className="form-label block text-xl">Send To</label>
+                                <input type="text" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="sendedTo" />
                             </div>
-
                             <div class="mb-4">
-                                <label className="form-label block text-xl">Advance Amount</label>
-                                <input type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="advanceAmount" />
-                            </div>
-                            <div className="md:flex items-center justify-between md:flex-row">
-                                <div class="mb-4">
                                     <label className="form-label block text-xl">Payment Method</label>
-                                    <select value={selectedPaymentMethod} onChange={handlePaymentMethodChange} name="paymentMethod" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
+                                    <select value={selectedPaymentMethod} onChange={handlePaymentMethodChange} name="paymentMethod" class="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
                                         <option value="Cash">Cash</option>
                                         <option value="Bank Transfer">Bank Transfer</option>
                                         <option value="Cheque">Cheque</option>
                                     </select>
-                                </div>
-                                {staffNames && <div class="mb-4">
-                                    <label className="form-label block text-xl">Received By</label>
-                                    <select name="receivedBy" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                                    {staffNames.map((name, index) => (
-                                        <option key={index} value={name}>{name}</option>
-                                    ))}
-                                    </select>
-                                </div>}
                             </div>
                             {selectedPaymentMethod === "Bank Transfer" && (
                                         <div className="mb-4">
@@ -146,25 +117,18 @@ const MarkHiredForm = ({ onCloseForm }) =>{
 
 
                                         </div>
-                                    )}
-                            <div class="mb-4">
-                                <label className="form-label block text-xl">Hiring Date</label>
-                                <input type="date" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="hiringDate" />
-                            </div>
-                            <div class="mb-4">
-                                <label className="form-label block text-xl">Customer Ph#</label>
-                                <input type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="cosPhone" />
-                            </div>
-                            <label class="block text-xl">Hiring Slip</label>                                
+                            )}
+                            
+                            <label class="block text-xl">Payment Slip</label>                                
                             <div class="flex items-center mb-4 justify-center w-full">
-                                <label for="hiring-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                <label for="paymentProof" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                         <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                                         </svg>
                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span></p>
                                     </div>
-                                    <input id="hiring-file" type="file" name="hiringSlip" hidden />
+                                    <input id="paymentProof" type="file" name="paymentProof" hidden />
                                 </label>
                             </div>
                             <div>
@@ -172,7 +136,7 @@ const MarkHiredForm = ({ onCloseForm }) =>{
                                 <div class="mb-4">
                                     <button disabled={spinningLoader} type="submit" className="w-full disabled:cursor-not-allowed disabled:bg-[#b9b9b9] flex items-center justify-center text-sm font-semibold bg-[#107243] text-white md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
                                         {spinningLoader && <img className="w-8" src="https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca.gif"/>}
-                                        {!spinningLoader && "Mark as Hired"}
+                                        {!spinningLoader && "Transfer"}
                                     </button>
                                 </div>
                             </div>
@@ -186,4 +150,4 @@ const MarkHiredForm = ({ onCloseForm }) =>{
     )
 }
 
-export default MarkHiredForm;
+export default DebitAmountForm;

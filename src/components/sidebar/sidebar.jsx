@@ -23,7 +23,8 @@ const Sidebar = () => {
     '/custom-requirements': 'Custom Requirements',
     '/staff': 'Access Staff',
     '/accounts': 'Accounts',
-    '/visa': 'Visas'
+    '/visa': 'Visas',
+    '/my-account' : 'My Account'
   };
   const [activeNav, setActiveNav] = useState(navMap[path] || 'Home');
 
@@ -41,7 +42,7 @@ const Sidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const isAdmin = [1, 2, 4, 8, 16, 32].every(role => userRoles.includes(role));
+  const isAdmin = [1, 2, 4, 8, 16, 32, 64, 128, 256].every(role => userRoles.includes(role));
 
     const roleType = isAdmin ? "Admin" : "Staff Member";
 
@@ -100,6 +101,16 @@ const Sidebar = () => {
                                 <span className="ms-3 text-base">Home</span>
                                 </Link>
                         </li>
+                            {userRoles.includes(roles.canAccessOnAccounts) && <li>
+                                <Link to="/my-account" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M3 9L12 2L21 9L21 20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22L5 22C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20L3 9Z" stroke="#434146" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9 22L9 12H15V22" stroke="#434146" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span className="ms-3 text-base">My Account</span>
+                                </Link>
+                        </li>}
+                        
                             
                                 <li>
                                     <Link to="/maids" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">

@@ -36,7 +36,7 @@ const CostumerAccountDetails = ({ accountDetails }) => {
                             <span>Update</span>
                         </div>
                     </div>
-                    {showPaymentUpdateForm && <aside className="absolute z-[20] right-0 w-screen sm:w-auto sm:mr-8 -mt-8">
+                    {showPaymentUpdateForm && <aside className="absolute z-[20] -right-8 w-screen sm:w-auto sm:mr-8 -mt-8">
                             <UpdateAccountPaymentForm accountDetails={accountDetails} onCloseForm={toggleFormVisibility} />
                     </aside>}
                     
