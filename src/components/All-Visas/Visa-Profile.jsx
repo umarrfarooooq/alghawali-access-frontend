@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ExtensionHistory from "./Extension-History";
 import Modal from "../UI/Modal";
 import axios from "axios";
@@ -18,13 +18,26 @@ const VisaProfile = ({visa}) =>{
     const [showModal, setShowModal] = useState(false);
     const [showEditExtendForm, setShowEditExtendForm] = useState(false)
     const [openVisaActions, setOpenVisaActions] = useState(false)
-   
+    const myActionRef = useRef(null);
+    
     const toggleHistoryBox = () =>{
         setHistoryOpen(!historyOpen)
     }
     const toggleVisaActionBox = () =>{
         setOpenVisaActions(!openVisaActions)
     }
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (myActionRef.current && !myActionRef.current.contains(event.target)) {
+                setOpenVisaActions(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [myActionRef]);
 
     const toggleFormVisibility = () => {
         setShowEditExtendForm(prevState => !prevState);
@@ -129,7 +142,7 @@ if (remainingDays.includes('Days Over Stay')) {
                 <MoreVertIcon />
             </div>
             <Grow in={openVisaActions}>
-            <div className={`${openVisaActions ? "flex" : "hidden"} transition-all border-solid border shadow-lg editAndDelSvg absolute right-8 top-12  flex-col items-end gap-3 bg-[#FFFBFA] z-10 p-3 rounded-xl`}>
+            <div ref={myActionRef} className={`${openVisaActions ? "flex" : "hidden"} transition-all border-solid border shadow-lg editAndDelSvg absolute right-8 top-12  flex-col items-end gap-3 bg-[#FFFBFA] z-10 p-3 rounded-xl`}>
                                     <div className="w-full">
                                         <div onClick={handleUpdateStatus} className="hiringBtn">
                                         {visa.hiringStatus ? <div className="py-3 px-4 flex items-center justify-center bg-[#28bb761a] transition-all cursor-pointer border text-[#0C8B3F] border-[#0C8B3F] w-full rounded-lg">

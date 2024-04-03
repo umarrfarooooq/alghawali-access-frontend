@@ -8,12 +8,13 @@ const MyPaymentDetailsPopup = ({ onCloseForm, userDetails }) => {
     };
 
     const renderBankDetails = () => {
-        return Object.entries(userDetails.remaining.Bank.details).map(([bankName, amount]) => (
+        return Object.entries(userDetails?.remaining?.Bank?.details ?? {}).map(([bankName, amount]) => (
             <div key={bankName} className="mb-4 w-full text-base font-medium flex items-center justify-start bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
                 {bankName}: {amount} OMR
             </div>
         ));
     };
+    
 
     return (
         <>
@@ -30,14 +31,15 @@ const MyPaymentDetailsPopup = ({ onCloseForm, userDetails }) => {
                 <div className="bg-[#EBEBEB] p-3 sm:p-8 rounded-xl shadow-lg">
                     <div className="bg-[#F2F5FF] rounded-lg p-3 sm:p-8">
                         
+                    <div className="mb-4 w-full text-base font-medium flex items-center justify-start bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
+                        Cash: {userDetails?.remaining?.Cash ?? 'N/A'} OMR
+                    </div>
+
                         <div className="mb-4 w-full text-base font-medium flex items-center justify-start bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                            Cash: {userDetails.remaining.Cash} OMR
+                            Cheque: {userDetails?.remaining?.Cheque ?? 'N/A'} OMR
                         </div>
                         <div className="mb-4 w-full text-base font-medium flex items-center justify-start bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                            Cheque: {userDetails.remaining.Cheque} OMR
-                        </div>
-                        <div className="mb-4 w-full text-base font-medium flex items-center justify-start bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
-                            Bank: {userDetails.remaining.Bank.totalAmount} OMR
+                            Bank: {userDetails?.remaining?.Bank?.totalAmount ?? 'N/A'} OMR
                         </div>
                         <hr />
                         <div>

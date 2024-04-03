@@ -42,7 +42,7 @@ const Sidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const isAdmin = [1, 2, 4, 8, 16, 32, 64, 128, 256].every(role => userRoles.includes(role));
+  const isAdmin = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512].every(role => userRoles.includes(role));
 
     const roleType = isAdmin ? "Admin" : "Staff Member";
 
@@ -101,7 +101,7 @@ const Sidebar = () => {
                                 <span className="ms-3 text-base">Home</span>
                                 </Link>
                         </li>
-                            {userRoles.includes(roles.canAccessOnAccounts) && <li>
+                            {userRoles.includes(roles.canAccessOnAccounts) || userRoles.includes(roles.fullAccessOnAccounts) && <li>
                                 <Link to="/my-account" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M3 9L12 2L21 9L21 20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22L5 22C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20L3 9Z" stroke="#434146" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
@@ -111,8 +111,7 @@ const Sidebar = () => {
                                 </Link>
                         </li>}
                         
-                            
-                                <li>
+                            {userRoles.includes(roles.CanAddMaid) || userRoles.includes(roles.ShowOurMaid) ? <li>
                                     <Link to="/maids" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                         <path d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15L9 15C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -123,7 +122,8 @@ const Sidebar = () => {
                                     </svg>
                                     <span className="ms-3 text-base">Our Maids</span>
                                     </Link>
-                            </li>
+                            </li> : ""}
+                                
                                 <li>
                                     <Link to="/custom-requirements" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -131,7 +131,7 @@ const Sidebar = () => {
                                         </svg>
                                     <span className="ms-3 text-base">Custom Requirements</span>
                                     </Link>
-                            </li>
+                                </li>
                             {userRoles.includes(roles.ShowAccessOnAddStaff) && <li>
                                 <Link to="/staff" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -242,7 +242,7 @@ const Sidebar = () => {
                                             <span className="ms-3 text-base">Home</span>
                                         </Link>
                                         </li>
-                                         <li onClick={() => setActiveNav("Our Maids")}>
+                                        {userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <li onClick={() => setActiveNav("Our Maids")}>
                                             <Link to="/maids"
                                             className={`flex items-center p-4 rounded-lg ${activeNav === "Our Maids" ? "bg-[#107243] text-white transition-all" : "text-gray-900" } group`}>
                                             <svg stroke="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -254,7 +254,8 @@ const Sidebar = () => {
                                             </svg>
                                             <span className="ms-3 text-base">Our Maids</span>
                                             </Link>
-                                        </li>
+                                        </li> : ""}
+                                         
                                          <li onClick={() => setActiveNav("Custom Requirements")}>
                                             <Link to="/custom-requirements"
                                             className={`flex items-center p-4 rounded-lg ${activeNav === "Custom Requirements" ? "bg-[#107243] text-white transition-all" : "text-gray-900" } group`}>
