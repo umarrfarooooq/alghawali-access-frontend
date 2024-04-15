@@ -21,7 +21,7 @@ const HomeCard2 = ({cardTxt, count, svg, cursor, details, staffDetails, action})
             ));
         } else {
             return Object.keys(details).map(country => (
-                <Link to="/maids">
+                <Link to={`/maids?nationality=${country}`}>
                     <div key={country} className="flex items-center justify-between p-3 rounded-md bg-[#EBEBEB]">
                         <div className="text-sm font-bold">{country}</div>
                         <div className="flex items-center gap-2">

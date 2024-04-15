@@ -86,12 +86,12 @@ const RequirementsTable = ({requirementsData}) => {
                                     </div>
                                     <div className="actionBtns flex gap-2">
                                     <Modal  modalAction={handleRequirementDelete} name={requirementsData.name} showModal={showModal} toggleModal={toggleModal}/>
-                                        <div onClick={ requirementsData.pendingStatus === "pending" ? handleRequirementMarkDone : null} className={`text-xs ${requirementsData.pendingStatus === "pending" ? "cursor-pointer bg-[#0C8B3F]" : "cursor-not-allowed bg-[#575757]"} w-fit p-3  bg-opacity-10 hover:bg-opacity-20 active:bg-opacity-30 transition-all rounded-3xl`}>
+                                        <div onClick={ requirementsData.pendingStatus === "pending" ? handleRequirementMarkDone : null} className={`text-xs ${requirementsData.pendingStatus === "pending" ? "cursor-pointer bg-[#0C8B3F]" : "cursor-not-allowed bg-[#575757]"} w-fit h-fit p-3  bg-opacity-10 hover:bg-opacity-20 active:bg-opacity-30 transition-all rounded-3xl`}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                     <path d="M2.75 8.75016L6.25014 12.2503L13.2504 4.75" stroke="#0C8B3F" stroke-width="1.50006" stroke-linecap="round" stroke-linejoin="round"/>
                                                 </svg>
                                             </div>
-                                        <div onClick={toggleModal} className="text-sm cursor-pointer font-semibold w-fit p-3 bg-[#CD2424] bg-opacity-10 hover:bg-opacity-20 active:bg-opacity-30 transition-all rounded-3xl">
+                                        <div onClick={toggleModal} className="text-sm cursor-pointer font-semibold w-fit h-fit p-3 bg-[#CD2424] bg-opacity-10 hover:bg-opacity-20 active:bg-opacity-30 transition-all rounded-3xl">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
   <path d="M18 18L6 6" stroke="#CD2424" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M6 18L18 6" stroke="#CD2424" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

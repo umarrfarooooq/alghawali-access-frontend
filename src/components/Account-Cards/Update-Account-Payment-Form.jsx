@@ -14,24 +14,29 @@ const UpdateAccountPaymentForm = ({ onCloseForm, accountDetails }) =>{
     const [staffNames, setStaffNames] = useState([]);
 
     useEffect(() => {
-        const fetchAccountNames = async () => {
-          try {
-            const response = await axiosInstense.get(
-              "api/v1/staffAccounts/all-accounts",
-              {
-                headers: {
-                  Authorization: `Bearer ${verifyToken}`,
-                },
-              }
-            );
-            setStaffNames(response.data.map(staff => staff.staffName));
-          } catch (error) {
-            console.error("Error fetching staff names:", error);
+      const fetchAccountNames = async () => {
+        try {
+          const response = await axiosInstense.get(
+            "api/v1/staffAccounts/all-account-names",
+            {
+              headers: {
+                Authorization: `Bearer ${verifyToken}`,
+              },
+            }
+          );
+          if (Array.isArray(response.data)) {
+            setStaffNames(response.data);
+          } else {
+            console.error("Unexpected data format in response:", response.data);
           }
-        };
-    
-        fetchAccountNames();
-      }, [verifyToken]);
+        } catch (error) {
+          console.error("Error fetching staff names:", error);
+        }
+      };
+  
+      fetchAccountNames();
+    }, [verifyToken]);
+
       
     const handleFormSubmit = async (e) => {
         e.preventDefault();

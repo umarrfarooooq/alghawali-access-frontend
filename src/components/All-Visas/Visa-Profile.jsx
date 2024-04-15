@@ -88,7 +88,6 @@ const VisaProfile = ({visa}) =>{
                 },
             }
             );
-            window.location.href = "/visa"
     
         } catch (error) {
             console.error("Error deleting maid:", error);
@@ -102,9 +101,7 @@ const VisaProfile = ({visa}) =>{
                     Authorization: `Bearer ${verifyToken}`,
                 },
             });
-            window.location.href = "/visa"
         } catch (error) {
-            console.log(verifyToken);
             console.error("Error Updating Status:", error);
         }
     }
@@ -144,14 +141,13 @@ if (remainingDays.includes('Days Over Stay')) {
             <Grow in={openVisaActions}>
             <div ref={myActionRef} className={`${openVisaActions ? "flex" : "hidden"} transition-all border-solid border shadow-lg editAndDelSvg absolute right-8 top-12  flex-col items-end gap-3 bg-[#FFFBFA] z-10 p-3 rounded-xl`}>
                                     <div className="w-full">
-                                        <div onClick={handleUpdateStatus} className="hiringBtn">
+                                        <button onClick={handleUpdateStatus} className="hiringBtn block w-full">
                                         {visa.hiringStatus ? <div className="py-3 px-4 flex items-center justify-center bg-[#28bb761a] transition-all cursor-pointer border text-[#0C8B3F] border-[#0C8B3F] w-full rounded-lg">
                                             <span>List Again</span>
                                         </div> : <div className="py-3 px-4 flex items-center justify-center bg-[#28bb761a] transition-all cursor-pointer border text-[#0C8B3F] border-[#0C8B3F] w-full rounded-lg">
                                             <span>Hired</span>
                                         </div>}
-                                        
-                                        </div>
+                                        </button>
                                     </div>
                                     <div onClick={toggleFormVisibility} className="editVisa w-full">
                                     <div className="py-3 px-4 flex items-center justify-center hover:bg-[#0c8b3f2a] transition-all cursor-pointer border text-[#0C8B3F] border-[#0C8B3F] w-full rounded-lg">

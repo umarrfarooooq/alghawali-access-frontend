@@ -338,12 +338,8 @@ const AddMaidForm = ({ onCloseForm }) =>{
                                     <option value="Qatar">Qatar</option>
                                     <option value="Saudi Arabia">Saudi Arabia</option>
                                     <option value="United Arab Emirates">United Arab Emirates</option>
-
-
                                     <option value="Jordan">Jordan</option>
                                     <option value="Malaysia">Malaysia</option>
-
-
                                     </select>
                                     
                                 </div>

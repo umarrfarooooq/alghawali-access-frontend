@@ -24,14 +24,18 @@ const ListAgainForm = ({ onCloseForm }) =>{
         const fetchAccountNames = async () => {
           try {
             const response = await axiosInstense.get(
-              "api/v1/staffAccounts/all-accounts",
+              "api/v1/staffAccounts/all-account-names",
               {
                 headers: {
                   Authorization: `Bearer ${verifyToken}`,
                 },
               }
             );
-            setStaffNames(response.data.map(staff => staff.staffName));
+            if (Array.isArray(response.data)) {
+              setStaffNames(response.data);
+            } else {
+              console.error("Unexpected data format in response:", response.data);
+            }
           } catch (error) {
             console.error("Error fetching staff names:", error);
           }
@@ -39,6 +43,7 @@ const ListAgainForm = ({ onCloseForm }) =>{
     
         fetchAccountNames();
       }, [verifyToken]);
+
 
     const handleMaidIdSelected = (selectedMaidID) => {
         setNewMaidID(selectedMaidID);

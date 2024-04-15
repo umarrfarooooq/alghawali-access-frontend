@@ -57,7 +57,7 @@ const StaffAccountPaymentHistory = ({ paymentHistory, formatDate }) => {
 
         
         {paymentHistory.proof && (
-          <div className="Entry justify-self-end w-fit cursor-pointer bg-[#E3E3E3] p-3 rounded-2xl">
+          <div className="Entry justify-self-end w-fit h-fit cursor-pointer bg-[#E3E3E3] p-3 rounded-2xl">
             <a
               href={`${import.meta.env.VITE_API_URL}${
                 paymentHistory.proof
