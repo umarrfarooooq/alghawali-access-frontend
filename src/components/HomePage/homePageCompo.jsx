@@ -158,8 +158,7 @@ const HomePageCompo = () =>{
                       </div>
                     </div>}
                     
-
-                    <div className="maidsProfiles mt-2">
+                    {userRoles.includes(roles.ShowOurMaid) && <div className="maidsProfiles mt-2">
                     <div className="flex flex-col gap-y-4">
                     <p className="font-semibold text-lg md:text-lg lg:text-2xl">Profiles</p>
                     {maidsInfo ?
@@ -177,7 +176,8 @@ const HomePageCompo = () =>{
                       )
                     }
                     </div>
-                    </div>
+                    </div>}
+                    
                 </div>
         </div>
             

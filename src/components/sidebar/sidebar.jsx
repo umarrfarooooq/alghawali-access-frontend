@@ -101,15 +101,18 @@ const Sidebar = () => {
                                 <span className="ms-3 text-base">Home</span>
                                 </Link>
                         </li>
-                            {userRoles.includes(roles.canAccessOnAccounts) || userRoles.includes(roles.fullAccessOnAccounts) && <li>
+                            {userRoles.includes(roles.canAccessOnAccounts) || userRoles.includes(roles.fullAccessOnAccounts) ? <li>
                                 <Link to="/my-account" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M3 9L12 2L21 9L21 20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22L5 22C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20L3 9Z" stroke="#434146" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M9 22L9 12H15V22" stroke="#434146" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                                    <path d="M4.78906 7.63281L8.57854 7.63281" stroke="#434146" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M18.8385 8.57813H16.3734C14.6824 8.57813 13.3125 9.85044 13.3125 11.4202C13.3125 12.99 14.6833 14.2623 16.3725 14.2623H18.8385C18.9181 14.2623 18.9569 14.2623 18.9901 14.2604C19.5017 14.2292 19.909 13.8512 19.9422 13.3765C19.9441 13.3462 19.9441 13.3093 19.9441 13.2363V9.60413C19.9441 9.53118 19.9441 9.49423 19.9422 9.46391C19.9081 8.98928 19.5017 8.61128 18.9901 8.58002C18.9569 8.57812 18.9181 8.57813 18.8385 8.57813Z" stroke="#434146" stroke-width="2"/>
+                                    <path d="M18.9668 8.58059C18.8929 6.80712 18.6561 5.71954 17.8897 4.95407C16.7803 3.84375 14.9936 3.84375 11.4211 3.84375L8.57895 3.84375C5.00642 3.84375 3.21968 3.84375 2.11032 4.95407C1 6.06343 1 7.85017 1 11.4227C1 14.9952 1 16.782 2.11032 17.8913C3.21968 19.0016 5.00642 19.0016 8.57895 19.0016H11.4211C14.9936 19.0016 16.7803 19.0016 17.8897 17.8913C18.6561 17.1259 18.8939 16.0383 18.9668 14.2648" stroke="#434146" stroke-width="2"/>
+                                    <path d="M4.78906 3.8426L8.32748 1.49597C8.8251 1.17229 9.40596 1 9.99959 1C10.5932 1 11.1741 1.17229 11.6717 1.49597L15.2101 3.8426" stroke="#434146" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M16.1484 11.4219H16.1584" stroke="#434146" stroke-width="1.89474" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                                 <span className="ms-3 text-base">My Account</span>
                                 </Link>
-                        </li>}
+                        </li> : ""}
                         
                             {userRoles.includes(roles.CanAddMaid) || userRoles.includes(roles.ShowOurMaid) ? <li>
                                     <Link to="/maids" className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group">

@@ -13,10 +13,15 @@ const CostumerAccountDetails = ({ accountDetails }) => {
     }
 
     const formatDate = (inputDate) => {
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Date(inputDate).toLocaleDateString('en-US', options);
+        const date = new Date(inputDate);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+    
+        return `${day}/${month}/${year}`;
     };
-    const paymentHistory = accountDetails.accountHistory || [];
+    
+    const paymentHistory = (accountDetails.accountHistory || []).filter(entry => entry.approved);
     const sortedPaymentHistory = [...paymentHistory].sort((a, b) => {
         const dateComparison = new Date(b.date) - new Date(a.date);
         if (dateComparison === 0) {
