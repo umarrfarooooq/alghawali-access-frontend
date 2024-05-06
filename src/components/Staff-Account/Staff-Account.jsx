@@ -18,6 +18,7 @@ const StaffAccount = () => {
     const [accountData, setAccountData]  = useState([])
     const [pendingPaymentRequests, setPendingPaymentRequests]  = useState([])
     const [allAccountData, setAllAccountData]  = useState([])
+    const [updateFlag, setUpdateFlag] = useState(false);
     const navigate = useNavigate();
 
     const [activeTab, setActiveTab] = useState("My Account");
@@ -85,7 +86,7 @@ const StaffAccount = () => {
         };
     
         fetchAllAPendingPaymentRequests();
-      }, [pendingPaymentRequests]);
+      }, [updateFlag]);
 
       return (
         <div className="md:px-8 px-4 pt-2">
@@ -115,7 +116,7 @@ const StaffAccount = () => {
                 {activeTab === "Pending Payments" ? (
                   <div className="w-full border rounded-3xl border-solid p-6 flex flex-col gap-3">
                     {pendingPaymentRequests.map((paymentRequest, index) => (
-                          <PendingPaymentTable key={index} pendingPaymentData={paymentRequest}/>
+                          <PendingPaymentTable setUpdateFlag={setUpdateFlag} key={index} pendingPaymentData={paymentRequest}/>
                       ))}
                   </div>
                 ) : null}
