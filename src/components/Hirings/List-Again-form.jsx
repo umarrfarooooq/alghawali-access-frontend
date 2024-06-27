@@ -1,9 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import debounce from 'lodash/debounce';
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 import { AutocompleteInput } from "./AutoSuggestMaid";
-
+import { Checkbox } from "../UI/checkbox"
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
   })
@@ -19,6 +20,31 @@ const ListAgainForm = ({ onCloseForm }) =>{
     const [isAmountReceived, setIsAmountReceived] = useState(false);
     const [newMaidID, setNewMaidID] = useState(null);
     const [staffNames, setStaffNames] = useState([]);
+    const [isReturnChecked, setIsReturnChecked] = useState(false);
+    const [formValues, setFormValues] = useState({
+      officeCharges: 0,
+      newMaidPrice: 0,
+    });
+
+    const handleNewMaidPriceChange = (e) => {
+      const { name, value } = e.target;
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+      }));
+    
+      const updatedValues = {
+        ...formValues,
+        [name]: value,
+      };
+    
+      const newMaidPrice = parseFloat(updatedValues.newMaidPrice) || 0;
+      const officeCharges = parseFloat(updatedValues.officeCharges) || 0;
+      const difference = newMaidPrice - officeCharges;
+      setIsAmountReceived(difference > parseFloat(accountDetails.receivedAmount));
+    };
+    
+    const debouncedHandleNewMaidPriceChange = useCallback(debounce(handleNewMaidPriceChange, 500), [formValues, accountDetails]);
 
     useEffect(() => {
         const fetchAccountNames = async () => {
@@ -100,12 +126,6 @@ const ListAgainForm = ({ onCloseForm }) =>{
         setSelectedPaymentMethod(e.target.value);
     };
 
-    const handleNewMaidPriceChange = (e) => {
-      const newMaidPrice = parseFloat(e.target.value);
-      const officeCharges = parseFloat(e.target.value);
-      const difference = newMaidPrice - officeCharges;
-      setIsAmountReceived(difference > parseFloat(accountDetails.receivedAmount));
-    };
 
     return(
         <>
@@ -137,13 +157,23 @@ const ListAgainForm = ({ onCloseForm }) =>{
                         </div>
                     </div>
                         {activeTab === "Return" && <form onSubmit={handleFormSubmit}>
-                                
+                        <div className="mb-4 flex gap-2 items-center">
+                                    <Checkbox id="returnAmount" checked={isReturnChecked} onCheckedChange={() => setIsReturnChecked(!isReturnChecked) }/>
+                                    <label
+                                      htmlFor="returnAmount"
+                                      className="text-sm cursor-pointer font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                      Return or Received Amount ?
+                                    </label>
+                                </div>
                                 <div className="mb-4">
                                     <label className="form-label block text-xl">Office Charges</label>
                                     <input type="number" placeholder="OMR 1000" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="officeCharges" />
                                 </div>
                                 <input type="text" name="option" value="return" hidden/>
-                                <div className="mb-4">
+                                {isReturnChecked && (
+                                  <>
+                                  <div className="mb-4">
                                     <label className="form-label block text-xl">Return Amount</label>
                                     <input type="number" placeholder="OMR 1000" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="returnAmount" />
                                 </div>
@@ -191,22 +221,30 @@ const ListAgainForm = ({ onCloseForm }) =>{
                                               </select>
                                         </div>
                                     )}
+                                  </>
+                                )}
+                                
                                 <div class="mb-4">
                                     <label className="form-label block text-xl">Un-Hiring Reason</label>
                                     <input type="text" placeholder="Un Hiring Reason" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="unHiringReason" />
                                 </div>
-                                <label class="block text-xl">Payment Slip</label>                                
-                                <div class="flex items-center mb-4 justify-center w-full">
-                                    <label htmlFor="payment-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                            </svg>
-                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span></p>
-                                        </div>
-                                        <input id="payment-file" type="file" name="paymentProof" hidden />
-                                    </label>
-                                </div>
+                                {isReturnChecked && (
+                                  <>
+                                    <label class="block text-xl">Payment Slip</label>                                
+                                    <div class="flex items-center mb-4 justify-center w-full">
+                                        <label htmlFor="payment-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-transparent dark:hover:bg-bray-800 dark:bg-transparent hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                                </svg>
+                                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span></p>
+                                            </div>
+                                            <input id="payment-file" type="file" name="paymentProof" hidden />
+                                        </label>
+                                    </div>
+                                  </>
+                                )}
+                                
                                 <div>
                                     <div class="mb-4">
                                         <button type="submit" className="w-full flex items-center justify-center text-sm font-semibold bg-[#CD2424] text-white md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
@@ -217,21 +255,38 @@ const ListAgainForm = ({ onCloseForm }) =>{
                                 </div>
                         </form>}
                         {activeTab === "Replace" && <form onSubmit={handleFormSubmit}>
+                        <div className="mb-4 flex gap-2 items-center">
+                                    <Checkbox id="returnAmount" checked={isReturnChecked} onCheckedChange={() => setIsReturnChecked(!isReturnChecked) }/>
+                                    <label
+                                      htmlFor="returnAmount"
+                                      className="text-sm cursor-pointer font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                      Return or Received Amount ?
+                                    </label>
+                                </div>
                                 <div className="mb-4">
                                     <label className="form-label block text-xl">Office Charges</label>
-                                    <input onChange={handleNewMaidPriceChange} type="number" placeholder="OMR 1000" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="officeCharges" />
+                                    <input onChange={debouncedHandleNewMaidPriceChange} type="number" placeholder="OMR 1000" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="officeCharges" />
                                 </div>
                                 <input type="text" name="option" value="replace" hidden/>
                                 <AutocompleteInput onMaidIdSelected={handleMaidIdSelected} />
 
                                 <div className="mb-4">
                                     <label className="form-label block text-xl">New Maid Price</label>
-                                    <input onChange={handleNewMaidPriceChange} type="number" placeholder="OMR 1000" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="newMaidPrice" />
+                                    <input onChange={debouncedHandleNewMaidPriceChange} type="number" placeholder="OMR 1000" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="newMaidPrice" />
                                 </div>
-                                <div className="mb-4">
-                                    <label className="form-label block text-xl">Received Amount</label>
-                                    <input type="number" placeholder="OMR 1000" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="receivedAmount" />
-                                </div>
+                                {isReturnChecked && (
+                                  <>
+                                  {
+                                    !isAmountReceived ? <div className="mb-4">
+                                    <label className="form-label block text-xl">Return Amount</label>
+                                    <input type="number" placeholder="OMR 1000" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="returnAmount" />
+                                  </div> : <div className="mb-4">
+                                      <label className="form-label block text-xl">Received Amount</label>
+                                      <input type="number" placeholder="OMR 1000" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="receivedAmount" />
+                                  </div>
+                                  }
+                                  
                                 <div className="md:flex items-center justify-between md:flex-row">
                                 <div class="mb-4">
                                     <label className="form-label block text-xl">Payment Method</label>
@@ -241,7 +296,7 @@ const ListAgainForm = ({ onCloseForm }) =>{
                                         <option value="Cheque">Cheque</option>
                                     </select>
                                 </div>
-                                {isAmountReceived ? <div class="mb-4">
+                                {!isAmountReceived ? <div class="mb-4">
                                     <label className="form-label block text-xl">Sended By</label>
                                     <select name="sendedBy" class="w-full bg-[#E3E3E3] md:w-[12rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
                                         {staffNames.map((name, index) => (
@@ -296,6 +351,9 @@ const ListAgainForm = ({ onCloseForm }) =>{
                                         <input id="payment-file" type="file" name="paymentProof" hidden />
                                     </label>
                                 </div>
+                                  </>
+                                )}
+                                
                                 <div>
                                     <div class="mb-4">
                                         <button type="submit" className="w-full flex items-center justify-center text-sm font-semibold bg-[#CD2424] text-white md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
