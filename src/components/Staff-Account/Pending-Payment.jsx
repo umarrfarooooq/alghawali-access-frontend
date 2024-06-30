@@ -5,11 +5,12 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import EditPaymentRequest from "./Edit-Payment-Request";
 import Backdrop from "../UI/Backdrop";
+import roles from "../roles/roles";
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
   })
 const PendingPaymentTable = ({pendingPaymentData, setUpdateFlag}) => {
-    const {verifyToken} = VerifyStaffToken();
+    const {verifyToken , roles: userRoles} = VerifyStaffToken();
     const [spinningLoader, setSpinningLoader] = useState(false)
     const [showPaymentUpdateForm, setShowPaymentUpdateForm] = useState(false)
     const formatDate = (inputDate) => {
@@ -109,14 +110,16 @@ const PendingPaymentTable = ({pendingPaymentData, setUpdateFlag}) => {
                                         <div className="text-xs">Date</div>
                                         <div className="text-sm font-semibold">{formatDate(pendingPaymentData.date)}</div>
                                     </div>
-
                                     <div className="flex items-center gap-2 md:justify-self-end">
+                                    {userRoles.includes(roles.fullAccessOnAccounts) && (
                                         <div onClick={toggleFormVisibility} className="Entry w-fit h-fit cursor-pointer bg-[#E3E3E3] p-3 rounded-3xl">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 22 22" fill="none">
                                                 <path d="M21 9.5V11C21 15.714 21 18.071 19.535 19.535C18.072 21 15.714 21 11 21C6.286 21 3.929 21 2.464 19.535C1 18.072 1 15.714 1 11C1 6.286 1 3.929 2.464 2.464C3.93 1 6.286 1 11 1H12.5" stroke="#262F32" stroke-width="1.5" stroke-linecap="round"/>
                                                 <path d="M15.6527 2.45512L16.3017 1.80612C16.8181 1.28988 17.5184 0.999906 18.2485 1C18.9787 1.00009 19.6789 1.29024 20.1952 1.80662C20.7114 2.323 21.0014 3.0233 21.0013 3.75347C21.0012 4.48365 20.7111 5.18388 20.1947 5.70012L19.5447 6.34912C19.5447 6.34912 18.1667 6.26812 16.9507 5.05112C15.7337 3.83512 15.6527 2.45612 15.6527 2.45612L9.68767 8.42012C9.28367 8.82412 9.08167 9.02612 8.90767 9.24912C8.70267 9.51112 8.52767 9.79612 8.38367 10.0971C8.26267 10.3521 8.17267 10.6231 7.99167 11.1651L7.41267 12.9001M7.41267 12.9001L7.03867 14.0221C6.99469 14.153 6.98808 14.2935 7.01959 14.4279C7.0511 14.5623 7.11948 14.6853 7.21705 14.7829C7.31461 14.8806 7.43749 14.9491 7.57186 14.9808C7.70623 15.0124 7.84677 15.006 7.97767 14.9621L9.10067 14.5881M7.41267 12.9001L9.10067 14.5881M19.5457 6.34812L13.5807 12.3131C13.1767 12.7171 12.9747 12.9191 12.7517 13.0931C12.4889 13.2981 12.2045 13.4738 11.9037 13.6171C11.6487 13.7381 11.3777 13.8281 10.8357 14.0091L9.10067 14.5881" stroke="#262F32" stroke-width="1"/>
                                             </svg>
-                                        </div>
+                                        </div>)
+                                    }
+                                    
                                         {pendingPaymentData.proof && (
                                             <PhotoProvider>
                                                 <PhotoView src={`${import.meta.env.VITE_API_URL}${pendingPaymentData.proof}`}>
