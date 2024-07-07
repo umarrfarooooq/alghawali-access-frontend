@@ -218,7 +218,7 @@ const MaidDetailComponent = () =>{
                         <div>
                             <div className="maidActions flex items-center gap-2">
                             {userRoles.includes(roles.canAccessOnAccounts) && <div>
-                            {maidDetails.isHired ? <div onClick={toggleListAgainFormVisibility} className="cursor-pointer listHired p-4 text-[#262F32] bg-[#EBEBEB] border border-solid rounded-2xl text-xs">
+                            {maidDetails.isHired || maidDetails.isMonthlyHired ? <div onClick={toggleListAgainFormVisibility} className="cursor-pointer listHired p-4 text-[#262F32] bg-[#EBEBEB] border border-solid rounded-2xl text-xs">
                                     <button>List Again</button>
                                 </div> : 
                                 <div onClick={toggleHiredFormVisibility} className="cursor-pointer markHired p-4 text-[#0C8B3F] bg-[#28BB761A] rounded-2xl text-xs">

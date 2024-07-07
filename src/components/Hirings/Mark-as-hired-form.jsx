@@ -2,12 +2,15 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
+import RadioBtns from "./RadioBtns";
 
 const axiosInstense = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
   })
 
 const MarkHiredForm = ({ onCloseForm }) =>{
+    const [hiringType, setHiringType] = useState('permanentHired');
+    const [monthlyHiringDuration, setMonthlyHiringDuration] = useState('1');
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
     const {verifyToken, staffName, staffId} = VerifyStaffToken();
     const {maidID} = useParams();
@@ -39,14 +42,21 @@ const MarkHiredForm = ({ onCloseForm }) =>{
         fetchAccountNames();
       }, [verifyToken]);
 
-
+      const handleHiringTypeChange = (value) => {
+        setHiringType(value);
+      };
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setSpinningLoader(true);
         const formData = new FormData(e.currentTarget);
+        
         formData.append('hiringBy', staffName)
         formData.append('staffAccount', staffName)
         formData.append('staffId', staffId)
+        formData.append('isMonthlyHiring', hiringType === 'monthlyHired');
+        if (hiringType === 'monthlyHired') {
+            formData.append('monthlyHiringDuration', monthlyHiringDuration);
+        }
         try {
           
           const response = await axiosInstense.post(
@@ -93,6 +103,8 @@ const MarkHiredForm = ({ onCloseForm }) =>{
                   </div>
                 }
                         <form onSubmit={handleFormSubmit}>
+                        <div className="mb-4"><RadioBtns onChange={handleHiringTypeChange}/></div>
+                        
                             <div className="mb-4">
                                 <label className="form-label block text-xl">Customer Name</label>
                                 <input type="text" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="fullName" />
@@ -155,6 +167,19 @@ const MarkHiredForm = ({ onCloseForm }) =>{
                                 <label className="form-label block text-xl">Hiring Date</label>
                                 <input type="date" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="hiringDate" />
                             </div>
+                            {hiringType === 'monthlyHired' && (
+                                <div className="mb-4">
+                                    <label className="form-label block text-xl">Monthly Hiring Duration (months)</label>
+                                    <input 
+                                        type="number" 
+                                        className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" 
+                                        name="monthlyHiringDuration" 
+                                        value={monthlyHiringDuration}
+                                        onChange={(e) => setMonthlyHiringDuration(e.target.value)}
+                                        min="1"
+                                    />
+                                </div>
+                            )}
                             <div class="mb-4">
                                 <label className="form-label block text-xl">Customer Ph#</label>
                                 <input type="number" className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2" name="cosPhone" />
@@ -176,7 +201,7 @@ const MarkHiredForm = ({ onCloseForm }) =>{
                                 <div class="mb-4">
                                     <button disabled={spinningLoader} type="submit" className="w-full disabled:cursor-not-allowed disabled:bg-[#b9b9b9] flex items-center justify-center text-sm font-semibold bg-[#107243] text-white md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2">
                                         {spinningLoader && <img className="w-8" src="https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca.gif"/>}
-                                        {!spinningLoader && "Mark as Hired"}
+                                        {!spinningLoader && `Mark as ${hiringType === 'monthlyHired' ? 'Monthly' : 'Permanent'} Hired`}
                                     </button>
                                 </div>
                             </div>
