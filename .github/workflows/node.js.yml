@@ -21,14 +21,5 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          eval $(ssh-agent -s)
-          ssh-add ~/.ssh/id_rsa
-          cd /root/alghawali/alghawali/alghawaliAccess/alghawali-access-frontend
-          git remote set-url origin git@github.com:umarrfarooooq/alghawali-access-frontend.git
-          git fetch origin master
-          git reset --hard origin/master
-          npm install
-          npm run build
-          rm -rf /var/www/training/*
-          mkdir -p /var/www/training/client
-          cp -r dist/* /var/www/training/client
+                whoami
+                pwd
