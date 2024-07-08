@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: Deploy Alghawali Frontend to VPS
 on:
   push:
     branches:
