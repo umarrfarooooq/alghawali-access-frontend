@@ -1,0 +1,26 @@
+name: Deploy to VPS
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2 
+    - name: Deploy frontend
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /root/alghawali/alghawali/alghawaliAccess/alghawali-access-frontend
+          git remote set-url origin git@github.com:umarrfarooooq/alghawali-access-frontend.git
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          git pull origin main
+          npm install
+          npm run build
+          rm -rf /var/www/training/*
+          mkdir -p /var/www/training/client
+          cp -r dist/* /var/www/training/client
