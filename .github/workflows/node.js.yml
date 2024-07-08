@@ -8,6 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2 
+    - name: Setup SSH key
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Add GitHub to known hosts
+      run: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
     - name: Deploy frontend
       uses: appleboy/ssh-action@master
       with:
@@ -15,10 +21,12 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_rsa
           cd /root/alghawali/alghawali/alghawaliAccess/alghawali-access-frontend
           git remote set-url origin git@github.com:umarrfarooooq/alghawali-access-frontend.git
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-          git pull origin main
+          git fetch origin master
+          git reset --hard origin/master
           npm install
           npm run build
           rm -rf /var/www/training/*
