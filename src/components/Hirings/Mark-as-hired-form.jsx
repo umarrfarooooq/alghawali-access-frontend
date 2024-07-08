@@ -53,10 +53,12 @@ const MarkHiredForm = ({ onCloseForm }) =>{
         formData.append('hiringBy', staffName)
         formData.append('staffAccount', staffName)
         formData.append('staffId', staffId)
-        formData.append('isMonthlyHiring', hiringType === 'monthlyHired');
+        
         if (hiringType === 'monthlyHired') {
+            formData.append('isMonthlyHiring', hiringType === 'monthlyHired');
             formData.append('monthlyHiringDuration', monthlyHiringDuration);
         }
+
         try {
           
           const response = await axiosInstense.post(
