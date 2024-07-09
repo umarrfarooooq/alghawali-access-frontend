@@ -11,23 +11,21 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Setup SSH key
+    - name: Setup SSH key and check
       run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
-
-    - name: Check SSH key
-      run: |
-        ssh-keygen -l -f ~/.ssh/id_rsa
+        mkdir -p .ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > .ssh/id_rsa
+        chmod 600 .ssh/id_rsa
+        ssh-keygen -y -f .ssh/id_rsa > .ssh/id_rsa.pub
+        echo "Public key from private key:"
+        cat .ssh/id_rsa.pub
 
     - name: Deploy to VPS
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        key_path: ~/.ssh/id_rsa
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           whoami
           pwd
