@@ -15,10 +15,14 @@ const AccountsCompo = () => {
   const [staffAccountDetails, setStaffAccountDetails] = useState([]);
   const [filteredCostumerAccounts, setFilteredCostumerAccounts] = useState([]);
   const { verifyToken, roles: userRoles, staffId } = VerifyStaffToken();
-  const [activeTab, setActiveTab] = useState("totalPayment");
+
+  const defaultTab = userRoles.includes(roles.fullAccessOnAccounts) ? "totalPayment" : "Costumers"
+
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
   useEffect(() => {
     const fetchAccountHistory = async () => {
       try {
@@ -38,6 +42,7 @@ const AccountsCompo = () => {
 
     fetchAccountHistory();
   }, []);
+
   useEffect(() => {
     const fetchStaffAccountSummary = async () => {
       try {
@@ -73,7 +78,6 @@ const AccountsCompo = () => {
           Authorization: `Bearer ${verifyToken}`,
         },
       });
-     
       setFilteredCostumerAccounts(response.data);
     } catch (error) {
       console.error("Error fetching accounts:", error);
