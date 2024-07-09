@@ -20,6 +20,8 @@ jobs:
         echo "Public key from private key:"
         cat ~/.ssh/id_rsa.pub
         ssh-keygen -l -f ~/.ssh/id_rsa
+        # Add this line to print out the public key in authorized_keys format
+        echo "$(cat ~/.ssh/id_rsa.pub)" >> ~/.ssh/temp_authorized_keys
 
     - name: Test SSH Connection
       run: |
