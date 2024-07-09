@@ -1,0 +1,39 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup SSH key and check
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
+        echo "Public key from private key:"
+        cat ~/.ssh/id_rsa.pub
+        ssh-keygen -l -f ~/.ssh/id_rsa
+        # Add this line to print out the public key in authorized_keys format
+        echo "$(cat ~/.ssh/id_rsa.pub)" >> ~/.ssh/temp_authorized_keys
+
+    - name: Test SSH Connection
+      run: |
+        ssh -v -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} 'echo "SSH Connection Successful"'
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key_path: ~/.ssh/id_rsa
+        script: |
+          whoami
+          pwd
+        debug: true
