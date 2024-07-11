@@ -26,7 +26,6 @@ const AllMaids = ({ searchTerm }) => {
         params: { search: searchTerm },
         headers: { Authorization: `Bearer ${verifyToken}` },
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error(`Error fetching ${key} maid data:`, error);
@@ -84,7 +83,6 @@ const AllMaids = ({ searchTerm }) => {
 
   const renderMaidProfiles = () => (
     <div className="w-full border rounded-2xl border-solid p-6 2xl:grid grid-cols-2 gap-2">
-    {console.log(getCurrentItems())}
       {loading ? (
         Array.from({ length: itemsToLoad }, (_, index) => <ProfileSkeletonCard key={index} />)
       ) : getCurrentItems().length > 0 ? (

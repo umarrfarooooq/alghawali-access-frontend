@@ -45,22 +45,23 @@ const MarkHiredForm = ({ onCloseForm }) =>{
       const handleHiringTypeChange = (value) => {
         setHiringType(value);
       };
-    const handleFormSubmit = async (e) => {
+      const handleFormSubmit = async (e) => {
         e.preventDefault();
         setSpinningLoader(true);
+        setErrorMessage('');
+        
         const formData = new FormData(e.currentTarget);
         
-        formData.append('hiringBy', staffName)
-        formData.append('staffAccount', staffName)
-        formData.append('staffId', staffId)
+        formData.append('hiringBy', staffName);
+        formData.append('staffAccount', staffName);
+        formData.append('staffId', staffId);
         
         if (hiringType === 'monthlyHired') {
-            formData.append('isMonthlyHiring', hiringType === 'monthlyHired');
-            formData.append('monthlyHiringDuration', monthlyHiringDuration);
+          formData.append('isMonthlyHiring', true);
+          formData.append('monthlyHiringDuration', monthlyHiringDuration);
         }
-
+      
         try {
-          
           const response = await axiosInstense.post(
             `api/v1/customerAccounts/hiring/${maidID}`,
             formData,
@@ -71,13 +72,37 @@ const MarkHiredForm = ({ onCloseForm }) =>{
               },
             }
           );
-    
+      
           setSpinningLoader(false);
           onCloseForm();
         } catch (error) {
-          console.error('Error submitting form:', error);
-          setErrorMessage('An error occurred. Please try again.');
           setSpinningLoader(false);
+          
+          if (error.response) {
+            if (error.response.status === 400) {
+              if (error.response.data.errors && Array.isArray(error.response.data.errors)) {
+                setErrorMessage(error.response.data.errors.join(', '));
+              } else if (error.response.data.error) {
+                setErrorMessage(error.response.data.error);
+              } else {
+                setErrorMessage('Validation error. Please check your input.');
+              }
+            } else if (error.response.status === 401) {
+              setErrorMessage('Unauthorized. Please log in again.');
+            } else if (error.response.status === 404) {
+              setErrorMessage('Maid not found. Please try again.');
+            } else if (error.response.status === 500) {
+              setErrorMessage('Server error. Please try again later.');
+            } else {
+              setErrorMessage(`An error occurred: ${error.response.data.message || 'Please try again.'}`);
+            }
+          } else if (error.request) {
+            setErrorMessage('No response from server. Please check your internet connection.');
+          } else {
+            setErrorMessage('An error occurred. Please try again.');
+          }
+          
+          console.error('Error submitting form:', error);
         }
       };
       
