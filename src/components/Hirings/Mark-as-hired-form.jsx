@@ -45,6 +45,7 @@ const MarkHiredForm = ({ onCloseForm }) =>{
       const handleHiringTypeChange = (value) => {
         setHiringType(value);
       };
+
       const handleFormSubmit = async (e) => {
         e.preventDefault();
         setSpinningLoader(true);
