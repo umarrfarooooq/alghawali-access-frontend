@@ -12,12 +12,19 @@ const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URL });
 const AllMaids = ({ searchTerm }) => {
   const { verifyToken, roles: userRoles, staffId } = VerifyStaffToken();
   const [maidData, setMaidData] = useState({
-    all: [], hired: [], monthlyHired: [], my: [], myNonHired: [], myMonthlyHired:[]
+    all: [], hired: [], monthlyHired: [], my: [], myNonHired: [], myMonthlyHired: []
   });
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("All Maids");
-  const [itemsToLoad, setItemsToLoad] = useState(6);
+  const [itemsToLoad, setItemsToLoad] = useState({
+    all: 6,
+    hired: 6,
+    monthlyHired: 6,
+    my: 6,
+    myNonHired: 6,
+    myMonthlyHired: 6
+  });
 
   const fetchMaids = async (endpoint, key) => {
     setLoading(true);
@@ -45,10 +52,10 @@ const AllMaids = ({ searchTerm }) => {
         fetchMaids(`api/v1/maids/byStaff/non-hired/${staffId}`, "myNonHired"),
         fetchMaids(`api/v1/maids/withMonthlyHired/${staffId}`, "myMonthlyHired"),
       ]);
-  
+
       setMaidData({ all, hired, monthlyHired, my, myNonHired, myMonthlyHired });
     };
-  
+
     fetchAllMaidData();
   }, [isFormVisible, searchTerm, staffId, verifyToken]);
 
@@ -59,7 +66,7 @@ const AllMaids = ({ searchTerm }) => {
 
   const getCurrentItems = () => {
     let key;
-    const canSeeAllMaids = userRoles.includes(roles.ShowOurMaid)
+    const canSeeAllMaids = userRoles.includes(roles.ShowOurMaid);
     switch (activeTab) {
       case "All Maids":
         key = "all";
@@ -76,31 +83,42 @@ const AllMaids = ({ searchTerm }) => {
       default:
         key = "all";
     }
-    return sortedMaidData(key).slice(0, itemsToLoad);
+    const items = sortedMaidData(key).slice(0, itemsToLoad[key]);
+    return { items, key };
   };
 
-  const handleLoadMore = () => setItemsToLoad(prev => prev + 6);
+  const handleLoadMore = (key) => {
+    setItemsToLoad(prev => ({
+      ...prev,
+      [key]: prev[key] + 6
+    }));
+  };
 
-  const renderMaidProfiles = () => (
-    <div className="w-full border rounded-2xl border-solid p-6 2xl:grid grid-cols-2 gap-2">
-      {loading ? (
-        Array.from({ length: itemsToLoad }, (_, index) => <ProfileSkeletonCard key={index} />)
-      ) : getCurrentItems().length > 0 ? (
-        getCurrentItems().map(maid => <MaidProfile key={maid._id} maid={maid} />)
-      ) : (
-        <p>No maids available for this category.</p>
-      )}
-      {!loading && itemsToLoad < sortedMaidData(activeTab.toLowerCase().replace(/\s/g, '')).length && (
-        <button
-          className="border bg-[#107243] border-[#29a167] px-6 py-3 text-sm mt-4 font-semibold cursor-pointer rounded-2xl text-[#fff]"
-          onClick={handleLoadMore}
-        >
-          Load More
-        </button>
-      )}
-    </div>
-  );
-
+  const renderMaidProfiles = () => {
+    const { items: currentItems, key } = getCurrentItems();
+    const totalItems = maidData[key]?.length || 0;
+    console.log(`Items to Load: ${itemsToLoad[key]}, Total Items: ${totalItems}, Key: ${key}`);
+    return (
+      <div className="w-full border rounded-2xl border-solid p-6 2xl:grid grid-cols-2 gap-2">
+        {loading ? (
+          Array.from({ length: itemsToLoad[key] }, (_, index) => <ProfileSkeletonCard key={index} />)
+        ) : currentItems.length > 0 ? (
+          currentItems.map(maid => <MaidProfile key={maid._id} maid={maid} />)
+        ) : (
+          <p>No maids available for this category.</p>
+        )}
+        {!loading && itemsToLoad[key] < totalItems && (
+          <button
+            className="border bg-[#107243] border-[#29a167] px-6 py-3 text-sm mt-4 font-semibold cursor-pointer rounded-2xl text-[#fff]"
+            onClick={() => handleLoadMore(key)}
+          >
+            Load More
+          </button>
+        )}
+      </div>
+    );
+  };
+  
   return (
     <>
       {isFormVisible && <Backdrop showBackdrop={true} />}
