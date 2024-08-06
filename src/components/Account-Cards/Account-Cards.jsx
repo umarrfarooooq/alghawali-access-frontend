@@ -16,7 +16,9 @@ const AccountsCompo = () => {
   const [filteredCostumerAccounts, setFilteredCostumerAccounts] = useState([]);
   const { verifyToken, roles: userRoles, staffId } = VerifyStaffToken();
 
-  const defaultTab = userRoles.includes(roles.fullAccessOnAccounts) ? "totalPayment" : "Costumers"
+  const defaultTab = userRoles.includes(roles.fullAccessOnAccounts)
+    ? "totalPayment"
+    : "Costumers";
 
   const [activeTab, setActiveTab] = useState(defaultTab);
   const handleTabClick = (tab) => {
@@ -89,8 +91,6 @@ const AccountsCompo = () => {
   useEffect(() => {
     fetchAccounts();
   }, []);
-
-  
 
   return (
     <>
@@ -201,8 +201,14 @@ const AccountsCompo = () => {
                         />
                         <HomeCard
                           cardTxt="Remaining Amount"
-                          total={accountDetails.remainingAmount}
-                          count={accountDetails.remainingAmount}
+                          total={
+                            staffAccountDetails.totalBalance -
+                            staffAccountDetails.totalReceived
+                          }
+                          count={
+                            staffAccountDetails.totalBalance -
+                            staffAccountDetails.totalReceived
+                          }
                         />
                         <HomeCard
                           cardTxt="Return Amount"
@@ -236,7 +242,9 @@ const AccountsCompo = () => {
 
           {activeTab === "Costumers" && (
             <div className="costumersAccounts">
-            <div className="mb-4"><Search onSearch={handleSearch} /></div>
+              <div className="mb-4">
+                <Search onSearch={handleSearch} />
+              </div>
               <div className="flex flex-col gap-2 md:gap-4">
                 {filteredCostumerAccounts
                   .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))

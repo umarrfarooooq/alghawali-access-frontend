@@ -97,7 +97,6 @@ const AllMaids = ({ searchTerm }) => {
   const renderMaidProfiles = () => {
     const { items: currentItems, key } = getCurrentItems();
     const totalItems = maidData[key]?.length || 0;
-    console.log(`Items to Load: ${itemsToLoad[key]}, Total Items: ${totalItems}, Key: ${key}`);
     return (
       <div className="w-full border rounded-2xl border-solid p-6 2xl:grid grid-cols-2 gap-2">
         {loading ? (
