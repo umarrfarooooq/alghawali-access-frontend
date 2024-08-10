@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import RequestProfile from "./Request-Profile";
 import { Loader2 } from "lucide-react";
+import { VerifyStaffToken } from "../Auth/VerifyToken";
 
 const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URL });
 
 const AllAgentRequests = ({ searchTerm }) => {
+  const { verifyToken } = VerifyStaffToken()
   const [activeTab, setActiveTab] = useState("Pending");
   const [total, setTotal] = useState(0);
   const [maids, setMaids] = useState([]);
@@ -21,6 +23,9 @@ const AllAgentRequests = ({ searchTerm }) => {
       const response = await axiosInstance.get(
         `api/v1/agentMaids/all-requests`,
         {
+          headers: {
+            Authorization: `Bearer ${verifyToken}`,
+          },
           params: {
             offset,
             limit,
@@ -67,7 +72,6 @@ const AllAgentRequests = ({ searchTerm }) => {
   useEffect(() => {
     fetchMaids();
   }, [offset]);
-
 
   return (
     <div className="md:ml-[20rem] md:px-8 px-4">

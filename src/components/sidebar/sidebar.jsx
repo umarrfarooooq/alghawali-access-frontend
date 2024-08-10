@@ -257,8 +257,8 @@ const Sidebar = () => {
                 ) : (
                   ""
                 )}
-                {userRoles.includes(roles.CanAddMaid) ||
-                userRoles.includes(roles.ShowOurMaid) ? (
+                {userRoles.includes(roles.ShowAgentRequest) ||
+                userRoles.includes(roles.ShowAgentRequest) ? (
                   <li>
                     <Link
                       to="/agent-requests"
@@ -612,8 +612,8 @@ const Sidebar = () => {
                     ) : (
                       ""
                     )}
-                    {userRoles.includes(roles.ShowOurMaid) ||
-                    userRoles.includes(roles.CanAddMaid) ? (
+                    {userRoles.includes(roles.ShowAgentRequest) ||
+                    userRoles.includes(roles.ShowAgentRequest) ? (
                       <li onClick={() => setActiveNav("Agent Requests")}>
                         <Link
                           to="/agent-requests"
@@ -691,11 +691,11 @@ const Sidebar = () => {
                       </Link>
                     </li>
                     {userRoles.includes(roles.ShowAccessOnAddStaff) && (
-                      <li onClick={() => setActiveNav("Access Staff")}>
+                      <li onClick={() => setActiveNav("Access")}>
                         <Link
                           to="/staff"
                           className={`flex items-center p-4 rounded-lg ${
-                            activeNav === "Access Staff"
+                            activeNav === "Access"
                               ? "bg-[#107243] text-white transition-all"
                               : "text-gray-900"
                           } group`}

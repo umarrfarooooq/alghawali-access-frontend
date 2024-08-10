@@ -2,10 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Modal from "../UI/Modal";
 import { useNavigate, useParams } from "react-router-dom";
-import { X } from "lucide-react";
+import { VerifyStaffToken } from "../Auth/VerifyToken";
 const axiosInstance = axios.create({ baseURL: import.meta.env.VITE_API_URL });
 
 const RequestDetails = () => {
+  const { verifyToken } = VerifyStaffToken();
   const { maidID } = useParams();
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
@@ -15,7 +16,12 @@ const RequestDetails = () => {
     const fetchMaidDetails = async () => {
       try {
         const response = await axiosInstance.get(
-          `api/v1/agentMaids/request/${maidID}`
+          `api/v1/agentMaids/request/${maidID}`,
+          {
+            headers: {
+              Authorization: `Bearer ${verifyToken}`,
+            },
+          }
         );
 
         setMaid(response.data.data);
@@ -37,7 +43,12 @@ const RequestDetails = () => {
     try {
       const response = await axiosInstance.put(
         `api/v1/agentMaids/update-request-status/${maid._id}`,
-        { status: "approved" }
+        { status: "approved" },
+        {
+          headers: {
+            Authorization: `Bearer ${verifyToken}`,
+          },
+        }
       );
       console.log("Accept Response:", response.data);
       toggleAcceptModal();
@@ -50,7 +61,12 @@ const RequestDetails = () => {
     try {
       const response = await axiosInstance.put(
         `api/v1/agentMaids/update-request-status/${maid._id}`,
-        { status: "rejected" }
+        { status: "rejected" },
+        {
+          headers: {
+            Authorization: `Bearer ${verifyToken}`,
+          },
+        }
       );
       console.log("Reject Response:", response.data);
       toggleRejectModal();
