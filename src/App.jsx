@@ -16,6 +16,7 @@ const Visa = lazy(() => import('./Pages/Visa'));
 const AgentRequests = lazy(() => import('./Pages/AgentRequests'));
 const CustomRequirements = lazy(() => import('./Pages/CustomRequirements'));
 const AgentRequestDetailsPage = lazy(() => import('./Pages/AgentRequestDetails'));
+const NewHome = lazy(() => import('./components/HomePage/New-Home'));
 import Loader from './components/UI/Loader';
 
 
@@ -27,6 +28,7 @@ function App() {
       <Suspense fallback={<div><Loader /></div>}>
         <Routes>
           <Route path="/" element={valid ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/new-home" element={valid ? <NewHome /> : <Navigate to="/login" />} />
           <Route path="/maids" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <OurMaids /> : <Navigate to="/" />} />
           <Route path="/agent-requests" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <AgentRequests /> : <Navigate to="/" />} />
           <Route path="/accounts" element={valid && userRoles.includes(roles.canAccessOnAccounts) ? <Accounts /> : <Navigate to="/" />} />

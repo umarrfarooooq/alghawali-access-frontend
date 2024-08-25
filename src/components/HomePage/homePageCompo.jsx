@@ -163,7 +163,7 @@ const HomePageCompo = () =>{
                     <p className="font-semibold text-lg md:text-lg lg:text-2xl">Profiles</p>
                     {maidsInfo ?
                         <div className="w-full rounded-xl bg-[#F2F2F2] overflow-auto gap-4 grid grid-cols-1 sm:flex items-start justify-start border border-solid p-6">
-                            <HomeCard2 details={maidsInfo.unHiredNationalityCount} svg={svg3} cardTxt="Total Number Of Non-Hire Maids" count={maidsInfo.remainingMaids} total={maidsInfo.remainingMaids}/>
+                            <HomeCard2 details={maidsInfo.unHiredNationalityCount} svg={svg3} cardTxt="Total Number Of Non-Hire Maids" count={maidsInfo.unhiredMaids} total={maidsInfo.unhiredMaids}/>
                             <HomeCard2 details={maidsInfo.hiredNationalityCount} cardTxt="Hired Maids" count={maidsInfo.hiredMaids} total={maidsInfo.hiredMaids}/>
                             <HomeCard2 details={maidsInfo.allNationalityCount} cardTxt="Total Maids" count={maidsInfo.totalMaids} total={maidsInfo.totalMaids}/>
                         </div>
