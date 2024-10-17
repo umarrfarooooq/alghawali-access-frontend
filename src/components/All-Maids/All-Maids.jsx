@@ -21,9 +21,11 @@ const AllMaids = ({ searchTerm }) => {
     all: 6,
     hired: 6,
     monthlyHired: 6,
+    onTrial: 6,
     my: 6,
     myNonHired: 6,
-    myMonthlyHired: 6
+    myMonthlyHired: 6,
+    myOnTrial: 6
   });
 
   const fetchMaids = async (endpoint, key) => {
@@ -44,16 +46,18 @@ const AllMaids = ({ searchTerm }) => {
 
   useEffect(() => {
     const fetchAllMaidData = async () => {
-      const [all, hired, monthlyHired, my, myNonHired, myMonthlyHired] = await Promise.all([
+      const [all, hired, monthlyHired, onTrial, my, myNonHired, myMonthlyHired, myOnTrial] = await Promise.all([
         fetchMaids("api/v1/maids", "all"),
         fetchMaids("api/v1/maids/withHired", "hired"),
         fetchMaids("api/v1/maids/withMonthlyHired", "monthlyHired"),
+        fetchMaids("api/v1/maids/onTrial", "onTrial"),
         fetchMaids(`api/v1/maids/byStaff/hired/${staffId}`, "my"),
         fetchMaids(`api/v1/maids/byStaff/non-hired/${staffId}`, "myNonHired"),
         fetchMaids(`api/v1/maids/withMonthlyHired/${staffId}`, "myMonthlyHired"),
+        fetchMaids(`api/v1/maids/byStaff/onTrial/${staffId}`, "myOnTrial")
       ]);
 
-      setMaidData({ all, hired, monthlyHired, my, myNonHired, myMonthlyHired });
+      setMaidData({ all, hired, monthlyHired, onTrial, my, myNonHired, myMonthlyHired, myOnTrial });
     };
 
     fetchAllMaidData();
@@ -76,6 +80,9 @@ const AllMaids = ({ searchTerm }) => {
         break;
       case "Monthly Hired":
         key = canSeeAllMaids ? "monthlyHired" : "myMonthlyHired";
+        break;
+      case "On Trial":
+        key = canSeeAllMaids ? "onTrial" : "myOnTrial";
         break;
       case "My Maids":
         key = "myNonHired";
@@ -145,8 +152,8 @@ const AllMaids = ({ searchTerm }) => {
             )}
           </div>
           <div className="maidsProfiles mt-2 min-h-screen max-h-full">
-            <div className="bg-[#E3E3E3] my-4 rounded-xl md:px-4 px-2 py-2 w-full gap-2 flex items-center justify-between">
-              {["All Maids", "Hired Maids", "Monthly Hired", "My Maids"].map(tab => (
+            <div className="bg-[#E3E3E3] my-4 rounded-xl md:px-4 px-2 py-2 w-full gap-2 md:flex grid grid-cols-2 md:flex-row md:items-center md:justify-between">
+              {["All Maids", "Hired Maids", "Monthly Hired", "On Trial", "My Maids"].map(tab => (
                 <div
                   key={tab}
                   onClick={() => setActiveTab(tab)}

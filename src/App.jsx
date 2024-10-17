@@ -18,7 +18,7 @@ const CustomRequirements = lazy(() => import('./Pages/CustomRequirements'));
 const AgentRequestDetailsPage = lazy(() => import('./Pages/AgentRequestDetails'));
 const NewHome = lazy(() => import('./components/HomePage/New-Home'));
 import Loader from './components/UI/Loader';
-
+const accountsAllowed = false;
 
 function App() {
   const { valid, roles: userRoles } = VerifyStaffToken();
@@ -31,9 +31,9 @@ function App() {
           <Route path="/new-home" element={valid ? <NewHome /> : <Navigate to="/login" />} />
           <Route path="/maids" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <OurMaids /> : <Navigate to="/" />} />
           <Route path="/agent-requests" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <AgentRequests /> : <Navigate to="/" />} />
-          <Route path="/accounts" element={valid && userRoles.includes(roles.canAccessOnAccounts) ? <Accounts /> : <Navigate to="/" />} />
-          <Route path="/my-account" element={valid && userRoles.includes(roles.canAccessOnAccounts) ? <StaffAccount /> : <Navigate to="/" />} />
-          <Route path="/my-account-history/:staffId" element={valid && userRoles.includes(roles.canAccessOnAccounts) ? <StaffAccountHistory /> : <Navigate to="/" />} />
+          <Route path="/accounts" element={valid && accountsAllowed && userRoles.includes(roles.canAccessOnAccounts) ? <Accounts /> : <Navigate to="/" />} />
+          <Route path="/my-account" element={valid && accountsAllowed && userRoles.includes(roles.canAccessOnAccounts) ? <StaffAccount /> : <Navigate to="/" />} />
+          <Route path="/my-account-history/:staffId" element={valid && accountsAllowed && userRoles.includes(roles.canAccessOnAccounts) ? <StaffAccountHistory /> : <Navigate to="/" />} />
           <Route path="/staff" element={valid && userRoles.includes(roles.ShowAccessOnAddStaff) ? <Staff /> : <Navigate to="/" />} />
           <Route path="/details/:maidID" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <MaidDetails /> : <Navigate to="/" />} />
           <Route path="/maid-request-detais/:maidID" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <AgentRequestDetailsPage /> : <Navigate to="/" />} />

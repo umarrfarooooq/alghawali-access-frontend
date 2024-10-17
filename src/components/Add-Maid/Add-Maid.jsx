@@ -196,7 +196,9 @@ const AddMaidForm = ({ onCloseForm }) =>{
                                     <option value="Myanmar">Myanmar</option>
                                     <option value="India">India</option>
                                     <option value="Philippines">Philippines</option>
-                                    <option value="Other">Other</option>
+                                    <option value="Indonesia">Indonesia</option>
+                                    <option value="Kenya">Kenya</option>
+                                    <option value="Madagascar">Madagascar</option>
                                 </select>
                                 {showOtherNationality && (
                                     <div className="my-4">
