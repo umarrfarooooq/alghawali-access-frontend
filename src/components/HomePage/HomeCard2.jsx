@@ -34,41 +34,18 @@ const HomeCard2 = ({
       ));
     } else {
       return Object.keys(details).map((country) => {
-        let flag = "";
-        switch (country) {
-          case "Nepal":
-            flag = "https://flagcdn.com/np.svg";
-            break;
-          case "Madagascar":
-            flag = "https://flagcdn.com/mg.svg";
-            break;
-          case "India":
-            flag = "https://flagcdn.com/in.svg";
-            break;
-          case "Indonesia":
-            flag = "https://flagcdn.com/id.svg";
-            break;
-          case "Kenya":
-            flag = "https://flagcdn.com/ke.svg";
-            break;
-          case "Myanmar":
-            flag = "https://flagcdn.com/mm.svg";
-            break;
-          case "Philippines":
-            flag = "https://flagcdn.com/ph.svg";
-            break;
-          case "Sri Lanka":
-            flag = "https://flagcdn.com/lk.svg";
-            break;
-          case "Madagascar":
-            flag = "https://flagcdn.com/mg.svg";
-            break;
-          case "Kenya":
-            flag = "https://flagcdn.com/ke.svg";
-            break;
-          default:
-            flag = "https://flagcdn.com/xx.svg";
-        }
+        const flagMap = {
+          "Nepal": "np",
+          "Madagascar": "mg",
+          "India": "in",
+          "Indonesia": "id",
+          "Kenya": "ke",
+          "Myanmar": "mm",
+          "Philippines": "ph",
+          "Sri Lanka": "lk"
+        };
+        
+        const flag = `https://flagcdn.com/${flagMap[country] || 'xx'}.svg`;
         return (
           <Link to={`/maids?nationality=${country}`} key={country}>
             <div className="flex items-center justify-between p-3 rounded-md bg-[#EBEBEB]">
