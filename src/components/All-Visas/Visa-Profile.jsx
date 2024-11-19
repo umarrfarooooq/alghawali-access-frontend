@@ -7,12 +7,14 @@ import UpdateOrExtendVisaForm from "./Update-And-Extend-Visa";
 import Backdrop from "../UI/Backdrop";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Grow from "@mui/material/Grow";
+import { Loader2 } from "lucide-react";
 
 const axiosInstense = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
 const VisaProfile = ({ visa }) => {
+  const [loading, setLoading] = useState(false);
   const { verifyToken } = VerifyStaffToken();
   const [historyOpen, setHistoryOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -79,6 +81,7 @@ const VisaProfile = ({ visa }) => {
     setShowModal((prevState) => !prevState);
   };
   const handleVisaDelete = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstense.delete(`api/v1/visa/${visa._id}`, {
         headers: {
@@ -87,9 +90,12 @@ const VisaProfile = ({ visa }) => {
       });
     } catch (error) {
       console.error("Error deleting maid:", error);
+    } finally {
+      setLoading(false);
     }
   };
   const handleUpdateStatus = async () => {
+    setLoading(true);
     try {
       await axiosInstense.put(
         `api/v1/visa/hiring-status/${visa._id}`,
@@ -102,6 +108,8 @@ const VisaProfile = ({ visa }) => {
       );
     } catch (error) {
       console.error("Error Updating Status:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -157,11 +165,23 @@ const VisaProfile = ({ visa }) => {
               >
                 {visa.hiringStatus ? (
                   <div className="py-3 px-4 flex items-center justify-center bg-[#28bb761a] transition-all cursor-pointer border text-[#0C8B3F] border-[#0C8B3F] w-full rounded-lg">
-                    <span>List Again</span>
+                    <span className="flex items-center gap-2">
+                      {loading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        "List Again"
+                      )}
+                    </span>
                   </div>
                 ) : (
                   <div className="py-3 px-4 flex items-center justify-center bg-[#28bb761a] transition-all cursor-pointer border text-[#0C8B3F] border-[#0C8B3F] w-full rounded-lg">
-                    <span>Hired</span>
+                    <span className="flex items-center gap-2">
+                      {loading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        "Hired"
+                      )}
+                    </span>
                   </div>
                 )}
               </button>
