@@ -7,6 +7,7 @@ import roles from "../roles/roles";
 import { VerifyStaffToken } from "../Auth/VerifyToken";
 import Backdrop from "../UI/Backdrop";
 import logo from "./logo.svg";
+import { BriefcaseMedical } from "lucide-react";
 const Sidebar = () => {
   const { roles: userRoles, staffName } = VerifyStaffToken();
 
@@ -26,6 +27,7 @@ const Sidebar = () => {
     "/staff": "Access",
     "/accounts": "Accounts",
     "/visa": "Visas",
+    "/medical": "Medical",
     "/my-account": "My Account",
   };
   const [activeNav, setActiveNav] = useState(navMap[path] || "Home");
@@ -154,7 +156,7 @@ const Sidebar = () => {
                   </Link>
                 </li>
                 {userRoles.includes(roles.canAccessOnAccounts) ||
-                (userRoles.includes(roles.fullAccessOnAccounts)) ? (
+                userRoles.includes(roles.fullAccessOnAccounts) ? (
                   <li>
                     <Link
                       to="/my-account"
@@ -438,6 +440,17 @@ const Sidebar = () => {
                         />
                       </svg>
                       <span className="ms-3 text-base">Visas</span>
+                    </Link>
+                  </li>
+                )}
+                {userRoles.includes(roles.canAccessOnVisa) && (
+                  <li>
+                    <Link
+                      to="/medical"
+                      className="flex items-center p-4 text-gray-900 rounded-lg active:bg-[#107243] active:text-white group"
+                    >
+                      <BriefcaseMedical />
+                      <span className="ms-3 text-base">Medical</span>
                     </Link>
                   </li>
                 )}
@@ -813,6 +826,22 @@ const Sidebar = () => {
                           </svg>
 
                           <span className="ms-3 text-base">Visas</span>
+                        </Link>
+                      </li>
+                    )}
+                    {userRoles.includes(roles.canAccessOnVisa) && (
+                      <li onClick={() => setActiveNav("Medical")}>
+                        <Link
+                          to="/medical"
+                          className={`flex items-center p-4 rounded-lg ${
+                            activeNav === "Medical"
+                              ? "bg-[#107243] text-white transition-all"
+                              : "text-gray-900"
+                          } group`}
+                        >
+                          <BriefcaseMedical />
+
+                          <span className="ms-3 text-base">Medical</span>
                         </Link>
                       </li>
                     )}

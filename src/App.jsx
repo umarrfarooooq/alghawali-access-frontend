@@ -13,6 +13,7 @@ const Accounts = lazy(() => import('./Pages/Accounts'));
 const StaffAccount = lazy(() => import('./Pages/Staff-Account-Page'));
 const StaffAccountHistory = lazy(() => import('./Pages/Staff-Account-Page-History'));
 const Visa = lazy(() => import('./Pages/Visa'));
+const Medical = lazy(() => import('./Pages/Medical'));
 const AgentRequests = lazy(() => import('./Pages/AgentRequests'));
 const CustomRequirements = lazy(() => import('./Pages/CustomRequirements'));
 const AgentRequestDetailsPage = lazy(() => import('./Pages/AgentRequestDetails'));
@@ -38,6 +39,7 @@ function App() {
           <Route path="/details/:maidID" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <MaidDetails /> : <Navigate to="/" />} />
           <Route path="/maid-request-detais/:maidID" element={valid && userRoles.includes(roles.ShowOurMaid) || userRoles.includes(roles.CanAddMaid) ? <AgentRequestDetailsPage /> : <Navigate to="/" />} />
           <Route path="/visa" element={valid ? <Visa /> : <Navigate to="/" />} />
+          <Route path="/medical" element={valid ? <Medical /> : <Navigate to="/" />} />
           <Route path="/custom-requirements" element={valid ? <CustomRequirements /> : <Navigate to="/" />} />
           <Route path="/login" element={!valid ? <Login /> : <Navigate to="/" />} />
           <Route path="/signup/:invitedToken" element={<InvitedSignup />} />

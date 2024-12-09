@@ -54,7 +54,7 @@ const AllVisas = ({ searchTerm }) => {
     };
 
     fetchVisaData();
-  }, [isFormVisible, visaData]);
+  }, [isFormVisible, searchTerm]);
 
   const toggleFormVisibility = () => {
     setIsFormVisible((prevState) => !prevState);
