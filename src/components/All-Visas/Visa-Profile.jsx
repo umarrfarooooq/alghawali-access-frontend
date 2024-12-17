@@ -13,7 +13,7 @@ const axiosInstense = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
-const VisaProfile = ({ visa }) => {
+const VisaProfile = ({ visa, onRefresh }) => {
   const [loading, setLoading] = useState(false);
   const { verifyToken } = VerifyStaffToken();
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -92,6 +92,7 @@ const VisaProfile = ({ visa }) => {
       console.error("Error deleting maid:", error);
     } finally {
       setLoading(false);
+      onRefresh()
     }
   };
   const handleUpdateStatus = async () => {
@@ -110,6 +111,7 @@ const VisaProfile = ({ visa }) => {
       console.error("Error Updating Status:", error);
     } finally {
       setLoading(false);
+      onRefresh()
     }
   };
 

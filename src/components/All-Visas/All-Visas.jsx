@@ -13,11 +13,15 @@ const axiosInstense = axios.create({
 
 const AllVisas = ({ searchTerm }) => {
   const { verifyToken, roles: userRoles } = VerifyStaffToken();
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [visaData, setVisaData] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("AllProfiles");
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+  };
+  const refreshData = () => {
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   const calculateRemainingDays = (endDate) => {
@@ -54,7 +58,7 @@ const AllVisas = ({ searchTerm }) => {
     };
 
     fetchVisaData();
-  }, [isFormVisible, searchTerm]);
+  }, [isFormVisible, searchTerm, refreshData]);
 
   const toggleFormVisibility = () => {
     setIsFormVisible((prevState) => !prevState);
@@ -249,7 +253,13 @@ const AllVisas = ({ searchTerm }) => {
                         const remainingDaysB = parseInt(b.remainingDays);
                         return remainingDaysA - remainingDaysB;
                       })
-                      .map((visa) => <VisaProfile key={visa._id} visa={visa} />)
+                      .map((visa) => (
+                        <VisaProfile
+                          onRefresh={refreshData}
+                          key={visa._id}
+                          visa={visa}
+                        />
+                      ))
                   : Array.from({ length: 6 }, (_, index) => (
                       <VisaSkeletonCard key={index} />
                     ))}
@@ -289,7 +299,13 @@ const AllVisas = ({ searchTerm }) => {
                         return remainingDaysA - remainingDaysB;
                       }
                     })
-                    .map((visa) => <VisaProfile key={visa._id} visa={visa} />)
+                    .map((visa) => (
+                      <VisaProfile
+                        onRefresh={refreshData}
+                        key={visa._id}
+                        visa={visa}
+                      />
+                    ))
                 ) : (
                   <p>No hired visa profiles available</p>
                 )}
@@ -342,7 +358,13 @@ const AllVisas = ({ searchTerm }) => {
                           : 0;
                       return overstayDaysB - overstayDaysA;
                     })
-                    .map((visa) => <VisaProfile key={visa._id} visa={visa} />)
+                    .map((visa) => (
+                      <VisaProfile
+                        onRefresh={refreshData}
+                        key={visa._id}
+                        visa={visa}
+                      />
+                    ))
                 ) : (
                   <p>No visa data available</p>
                 )}
