@@ -260,7 +260,7 @@ const VisaProfile = ({ visa, onRefresh }) => {
             <div className="maidName text-lg font-bold">{visa.maidName}</div>
             <div className="overflow-x-auto w-full">
               <div className="maidDetails overflow-y-auto max-w-full">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 overflow-x-auto gap-y-4 gap-x-8 mt-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 overflow-x-auto gap-y-4 gap-x-8 mt-4">
                   <div className="nationality ">
                     <div className="text-xs">Entry To Oman</div>
                     <div className="text-sm font-semibold">
@@ -296,6 +296,14 @@ const VisaProfile = ({ visa, onRefresh }) => {
                       <div className="text-xs">Passport No</div>
                       <div className="text-sm font-semibold">
                         {visa.passportNo}
+                      </div>
+                    </div>
+                  )}
+                  {visa.registrationFrom && (
+                    <div className="registrationFrom">
+                      <div className="text-xs">Registration From</div>
+                      <div className="text-sm font-semibold">
+                        {visa.registrationFrom}
                       </div>
                     </div>
                   )}

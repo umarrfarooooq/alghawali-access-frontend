@@ -9,7 +9,25 @@ const axiosInstense = axios.create({
 const AddVisaForm = ({ onCloseForm }) => {
   const { verifyToken } = VerifyStaffToken();
   const [errorMessage, setErrorMessage] = useState(false);
+  const [registrationFrom, setRegistrationFrom] = useState("");
+  const [otherRegistration, setOtherRegistration] = useState("");
+  const [showOtherRegistration, setShowOtherRegistration] = useState(false);
   const [spinningLoader, setSpinningLoader] = useState(false);
+
+  const handleOtherRegistration = (e) => {
+    const value = e.target.value;
+    setRegistrationFrom(value);
+    if (value === 'Other') {
+      setShowOtherRegistration(true);
+    } else {
+      setShowOtherRegistration(false);
+      setOtherRegistration('');
+    }
+  };
+
+  const handleOtherRegistrationInput = (e) => {
+    setOtherRegistration(e.target.value);
+  };
 
   const handleMaidFormSubmit = async (event) => {
     event.preventDefault();
@@ -34,6 +52,10 @@ const AddVisaForm = ({ onCloseForm }) => {
       setSpinningLoader(false);
       return;
     }
+    if (registrationFrom === 'Other') {
+      formData.set('registrationFrom', otherRegistration);
+      formData.delete('otherRegistrationFrom');
+    }
 
     try {
       const response = await axiosInstense.post("api/v1/visa", formData, {
@@ -42,7 +64,6 @@ const AddVisaForm = ({ onCloseForm }) => {
           "Content-Type": "multipart/form-data",
         },
       });
-
       setSpinningLoader(false);
       onCloseForm();
     } catch (error) {
@@ -105,6 +126,33 @@ const AddVisaForm = ({ onCloseForm }) => {
                   class="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2"
                   name="maidName"
                 />
+              </div>
+              <div className="mb-4">
+                <label className="form-label block text-xl">
+                  Registration From
+                </label>
+                <select
+                  type="text"
+                  className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2"
+                  name="registrationFrom"
+                  onChange={handleOtherRegistration}
+                >
+                  <option value="Al Maktam">Al Maktam</option>
+                  <option value="Al Burimi">Al Burimi</option>
+                  <option value="Other">Other</option>
+                </select>
+                {showOtherRegistration && (
+                  <div className="my-4">
+                    <input
+                      type="text"
+                      id="otherRegistration"
+                      className="w-full bg-[#E3E3E3] md:w-[26rem] h-[4rem] outline-none border-none rounded-lg px-2 py-2"
+                      name="otherRegistrationFrom"
+                      placeholder="Enter Registration From"
+                      onChange={handleOtherRegistrationInput}
+                    />
+                  </div>
+                )}
               </div>
               <div className="mb-4">
                 <label className="form-label block text-xl">Nationality</label>
